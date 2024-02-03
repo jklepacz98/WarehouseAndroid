@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.warehouseandroid"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.warehouseandroid"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -70,6 +70,7 @@ dependencies {
 
     //koin
     implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
 
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
