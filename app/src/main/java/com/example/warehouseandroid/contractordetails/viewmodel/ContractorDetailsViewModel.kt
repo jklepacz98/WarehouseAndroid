@@ -56,7 +56,6 @@ class ContractorDetailsViewModel(
                 when (resource) {
                     is Resource.Success -> {
                         //todo
-                        println("Cos123 success")
                         contractorFlow.value = resource.data
                     }
                     //todo
