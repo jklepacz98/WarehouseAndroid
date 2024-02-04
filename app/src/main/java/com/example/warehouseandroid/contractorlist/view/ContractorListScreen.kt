@@ -33,18 +33,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ContractorListScreen() {
     val viewModel = koinViewModel<ContractorListViewModel>()
-    val context = LocalContext.current
     val contractors by viewModel.contractorListFlow.collectAsStateWithLifecycle(emptyList())
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
 
-    LaunchedEffect(errorMessage) {
-        errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        }
-    }
-
+    ErrorToast(errorMessage)
     ContractorList(contractors, pullRefreshState, refreshing)
 }
 
@@ -84,6 +78,16 @@ fun ContractorCard(contractor: Contractor) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = contractor.name ?: stringResource(R.string.no_name))
             Text(text = contractor.symbol ?: stringResource(R.string.no_symbol))
+        }
+    }
+}
+
+@Composable
+fun ErrorToast(errorMessage: String?) {
+    val context = LocalContext.current
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -5,10 +5,13 @@ import com.example.warehouseandroid.contractor.local.ContractorEntity
 
 class ContractorMapper {
     companion object {
-        fun map(contractorEntityList: List<ContractorEntity>): List<Contractor> {
+        fun mapToContractor(contractorEntity: ContractorEntity): Contractor =
+            //todo !!
+            Contractor(contractorEntity.id!!, contractorEntity.symbol, contractorEntity.name)
+
+        fun mapToContractors(contractorEntityList: List<ContractorEntity>): List<Contractor> {
             return contractorEntityList.map {
-                //todo
-                Contractor(it.id!!, it.symbol, it.name)
+                mapToContractor(it)
             }
         }
     }
