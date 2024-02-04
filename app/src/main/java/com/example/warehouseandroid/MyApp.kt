@@ -12,6 +12,7 @@ class MyApp : Application() {
             modules(
                 listOf(
                     apiModule,
+                    databaseModule,
                     repositoryModule,
                     viewModelModule
                 )

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WarehouseAndroid</string>
+    <string name="no_name">No name</string>
+    <string name="no_symbol">No symbol</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="contractors">Contractors</string>
+    <string name="receipt_documents">Receipt documents</string>
 </resources>

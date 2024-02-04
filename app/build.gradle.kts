@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("io.realm.kotlin")
 }
 
 android {
@@ -75,4 +76,17 @@ dependencies {
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //realm
+    implementation("io.realm.kotlin:library-base:1.11.0")
+
+    //todo
+    //material
+    implementation("androidx.compose.material:material:1.6.0")
+
+    //lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.1")
 }
