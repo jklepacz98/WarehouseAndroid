@@ -1,4 +1,4 @@
-package com.example.warehouseandroid.contractorlist.viewmodel
+package com.example.warehouseandroid.contractordetails.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,26 +8,29 @@ import com.example.warehouseandroid.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class ContractorListViewModel(private val contractorDataSource: ContractorDataSource) :
-    ViewModel() {
+class ContractorDetailsViewModel(
+    private val contractorDataSource: ContractorDataSource,
+    private val contractorId: Long
+) : ViewModel() {
 
-    val contractorListFlow: MutableStateFlow<List<Contractor>> = MutableStateFlow(emptyList())
+    val contractorFlow: MutableStateFlow<Contractor?> = MutableStateFlow(null)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
-        getAllContractors()
-        observeAllContractors()
+
+        //todo
+        fetchContractor()
+        observeContractor()
     }
 
     fun refresh() {
-        getAllContractors()
+        fetchContractor()
     }
 
-    //todo change name
-    private fun getAllContractors() {
+    private fun fetchContractor() {
         viewModelScope.launch {
-            contractorDataSource.getAllContractors().collect { resource ->
+            contractorDataSource.getContractor(contractorId).collect { resource ->
                 when (resource) {
                     //todo
                     is Resource.Success -> {
@@ -47,18 +50,23 @@ class ContractorListViewModel(private val contractorDataSource: ContractorDataSo
         }
     }
 
-    private fun observeAllContractors() {
+    private fun observeContractor() {
         viewModelScope.launch {
-            contractorDataSource.observeAllContractors().collect() { resource ->
+            contractorDataSource.observeContractor(contractorId).collect() { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         //todo
-                        contractorListFlow.value = resource.data
+                        println("Cos123 success")
+                        contractorFlow.value = resource.data
                     }
                     //todo
-                    is Resource.Error -> {}
+                    is Resource.Error -> {
+                        errorFlow.value = resource.message
+                    }
                     //todo
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+
+                    }
                 }
             }
         }

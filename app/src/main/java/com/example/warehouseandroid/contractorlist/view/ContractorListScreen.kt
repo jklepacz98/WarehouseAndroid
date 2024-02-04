@@ -1,6 +1,7 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.example.warehouseandroid.contractorlist.view
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,24 +15,23 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.warehouseandroid.R
 import com.example.warehouseandroid.contractor.Contractor
 import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewModel
+import com.example.warehouseandroid.ui.ErrorToast
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ContractorListScreen() {
+fun ContractorListScreen(onContractorClick: (Long) -> Unit) {
     val viewModel = koinViewModel<ContractorListViewModel>()
     val contractors by viewModel.contractorListFlow.collectAsStateWithLifecycle(emptyList())
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
@@ -39,13 +39,15 @@ fun ContractorListScreen() {
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
 
     ErrorToast(errorMessage)
-    ContractorList(contractors, pullRefreshState, refreshing)
+    ContractorsLazyColumn(contractors, pullRefreshState, refreshing, onContractorClick)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ContractorList(
-    contractorList: List<Contractor>, pullRefreshState: PullRefreshState, refreshing: Boolean
+fun ContractorsLazyColumn(
+    contractorList: List<Contractor>,
+    pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
+    onClick: (Long) -> Unit
 ) {
 
 
@@ -55,7 +57,7 @@ fun ContractorList(
             .fillMaxSize()
     ) {
         items(contractorList) { contractor ->
-            ContractorCard(contractor)
+            ContractorCard(contractor, onClick)
         }
     }
     PullRefreshIndicator(
@@ -68,9 +70,11 @@ fun ContractorList(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContractorCard(contractor: Contractor) {
+fun ContractorCard(contractor: Contractor, onClick: (Long) -> Unit) {
     Card(
+        onClick = { onClick(contractor.id) },
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .fillMaxWidth()
@@ -78,16 +82,6 @@ fun ContractorCard(contractor: Contractor) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = contractor.name ?: stringResource(R.string.no_name))
             Text(text = contractor.symbol ?: stringResource(R.string.no_symbol))
-        }
-    }
-}
-
-@Composable
-fun ErrorToast(errorMessage: String?) {
-    val context = LocalContext.current
-    LaunchedEffect(errorMessage) {
-        errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
 }

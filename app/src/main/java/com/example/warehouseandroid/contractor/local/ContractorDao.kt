@@ -24,7 +24,7 @@ class ContractorDao(private val realm: Realm) {
     }
 
     private fun queryContractor(id: Long?): RealmSingleQuery<ContractorEntity> =
-        realm.query(CLASS_NAME, "_id == $0", id).first()
+        realm.query(CLASS_NAME, "id == $0", id).first()
 
     fun observeContractor(id: Long): Flow<SingleQueryChange<ContractorEntity>> =
         queryContractor(id).asFlow()

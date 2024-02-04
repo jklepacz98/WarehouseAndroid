@@ -5,7 +5,7 @@ import com.example.warehouseandroid.contractor.mapper.ContractorEntityMapper
 import com.example.warehouseandroid.contractor.mapper.ContractorMapper
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteDataSource
 import com.example.warehouseandroid.util.ApiResult
-import com.example.warehouseandroid.util.LocalResult
+import com.example.warehouseandroid.util.DatabaseResult
 import com.example.warehouseandroid.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -21,7 +21,9 @@ class ContractorRepository(
         emit(Resource.Loading())
         val networkResult = contractorRemoteDataSource.getContractor(id)
         when (networkResult) {
-            is ApiResult.Success -> clearCache(networkResult.data)
+            //todo
+            //is ApiResult.Success -> clearCache(networkResult.data)
+            is ApiResult.Success -> emit(Resource.Success(networkResult.data))
             is ApiResult.Error -> emit(Resource.Error(networkResult.message))
             is ApiResult.Exception -> emit(Resource.Error(networkResult.e.message ?: UNKNOWN_ERROR))
         }
@@ -52,7 +54,7 @@ class ContractorRepository(
         val networkResult = contractorRemoteDataSource.deleteContractor(id)
         when (networkResult) {
             //todo
-            is ApiResult.Success -> {}
+            is ApiResult.Success -> emit(Resource.Success(Unit))
             is ApiResult.Error -> emit(Resource.Error(networkResult.message))
             is ApiResult.Exception -> emit(Resource.Error(networkResult.e.message ?: UNKNOWN_ERROR))
         }
@@ -61,8 +63,8 @@ class ContractorRepository(
     private suspend fun FlowCollector<Resource<Contractor>>.clearCache(data: Contractor) {
         val result = contractorLocalDataSource.deleteContractor(data.id)
         when (result) {
-            is LocalResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is LocalResult.Success -> fillCache(data)
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> fillCache(data)
         }
     }
 
@@ -70,23 +72,23 @@ class ContractorRepository(
         val contractorEntity = ContractorEntityMapper.mapToContractorEntity(data)
         val result = contractorLocalDataSource.insertContractor(contractorEntity)
         when (result) {
-            is LocalResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is LocalResult.Success -> emit(Resource.Success(data))
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> emit(Resource.Success(data))
         }
     }
 
     override suspend fun observeContractor(id: Long): Flow<Resource<Contractor>> = flow {
         emit(Resource.Loading())
-        contractorLocalDataSource.observeContractor(id).collect { result ->
-            val contractorEntity = result.obj
-            if (contractorEntity != null) {
-                val data = ContractorMapper.mapToContractor(contractorEntity)
-                emit(Resource.Success(data))
-            } else {
-                //todo
-                emit(Resource.Error(CONTRACTOR_NOT_FOUND))
-            }
 
+        contractorLocalDataSource.observeContractor(id).collect { result ->
+            when (result) {
+                is DatabaseResult.Success -> {
+                    val contractorList = ContractorMapper.mapToContractor(result.data)
+                    emit(Resource.Success(contractorList))
+                }
+
+                is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            }
         }
     }
 
@@ -104,8 +106,8 @@ class ContractorRepository(
     private suspend fun FlowCollector<Resource<List<Contractor>>>.clearCache(data: List<Contractor>) {
         val result = contractorLocalDataSource.deleteAllContractors()
         when (result) {
-            is LocalResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is LocalResult.Success -> fillCache(data)
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> fillCache(data)
         }
     }
 
@@ -113,8 +115,8 @@ class ContractorRepository(
         val contractorEntityList = ContractorEntityMapper.mapToContractorEntities(data)
         val result = contractorLocalDataSource.insertContractors(contractorEntityList)
         when (result) {
-            is LocalResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is LocalResult.Success -> emit(Resource.Success(data))
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> emit(Resource.Success(data))
         }
     }
 
@@ -122,14 +124,19 @@ class ContractorRepository(
     override suspend fun observeAllContractors(): Flow<Resource<List<Contractor>>> = flow {
         emit(Resource.Loading())
         contractorLocalDataSource.observeAllContractors().collect { result ->
-            val data = ContractorMapper.mapToContractors(result.list)
-            emit(Resource.Success(data))
+            when (result) {
+                is DatabaseResult.Success -> {
+                    val contractorList = ContractorMapper.mapToContractors(result.data)
+                    emit(Resource.Success(contractorList))
+                }
+
+                is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            }
         }
     }
 
     //todo
     companion object {
         private const val UNKNOWN_ERROR: String = "UnknownError"
-        private const val CONTRACTOR_NOT_FOUND: String = "Contractor not found"
     }
 }

@@ -8,6 +8,7 @@ import com.example.warehouseandroid.contractor.local.ContractorLocalDataSource
 import com.example.warehouseandroid.contractor.local.ContractorLocalRepository
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteDataSource
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteRepository
+import com.example.warehouseandroid.contractordetails.viewmodel.ContractorDetailsViewModel
 import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewModel
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -44,4 +45,5 @@ val repositoryModule = module {
 
 val viewModelModule = module {
     viewModel { ContractorListViewModel(get()) }
+    viewModel { (contractorId: Long) -> ContractorDetailsViewModel(get(), contractorId) }
 }

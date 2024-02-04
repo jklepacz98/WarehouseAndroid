@@ -1,15 +1,13 @@
 package com.example.warehouseandroid.contractor.local
 
-import com.example.warehouseandroid.util.LocalResult
-import io.realm.kotlin.notifications.ResultsChange
-import io.realm.kotlin.notifications.SingleQueryChange
+import com.example.warehouseandroid.util.DatabaseResult
 import kotlinx.coroutines.flow.Flow
 
 interface ContractorLocalDataSource {
-    suspend fun insertContractor(contractorEntity: ContractorEntity): LocalResult<Boolean>
-    suspend fun deleteContractor(id: Long): LocalResult<Boolean>
-    fun observeContractor(id: Long): Flow<SingleQueryChange<ContractorEntity>>
-    suspend fun insertContractors(contractorEntityList: List<ContractorEntity>): LocalResult<Boolean>
-    suspend fun deleteAllContractors(): LocalResult<Boolean>
-    fun observeAllContractors(): Flow<ResultsChange<ContractorEntity>>
+    suspend fun insertContractor(contractorEntity: ContractorEntity): DatabaseResult<Boolean>
+    suspend fun deleteContractor(id: Long): DatabaseResult<Boolean>
+    fun observeContractor(id: Long): Flow<DatabaseResult<ContractorEntity>>
+    suspend fun insertContractors(contractorEntityList: List<ContractorEntity>): DatabaseResult<Boolean>
+    suspend fun deleteAllContractors(): DatabaseResult<Boolean>
+    fun observeAllContractors(): Flow<DatabaseResult<List<ContractorEntity>>>
 }
