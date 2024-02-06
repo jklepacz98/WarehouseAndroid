@@ -20,9 +20,6 @@ class ContractorLocalRepository(private val contactorDao: ContractorDao) :
                 val contractorEntity = result.obj
                 if (contractorEntity != null) {
                     emit(DatabaseResult.Success(contractorEntity))
-                } else {
-                    //todo
-                    throw Exception(CONTRACTOR_NOT_FOUND)
                 }
             }
         } catch (e: Exception) {

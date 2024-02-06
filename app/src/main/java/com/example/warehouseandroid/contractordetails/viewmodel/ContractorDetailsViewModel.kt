@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.contractor.Contractor
 import com.example.warehouseandroid.contractor.ContractorDataSource
 import com.example.warehouseandroid.util.Resource
+import com.google.gson.Gson
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ContractorDetailsViewModel(
     private val contractorDataSource: ContractorDataSource,
+    private val gson: Gson,
     private val contractorId: Long
 ) : ViewModel() {
 
@@ -24,6 +26,11 @@ class ContractorDetailsViewModel(
         //todo
         fetchContractor()
         startObservingContractor()
+    }
+
+    fun serializeContractor(): String {
+        val contractor = contractorFlow.value
+        return gson.toJson(contractor)
     }
 
     fun refresh() {

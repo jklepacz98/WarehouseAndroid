@@ -6,9 +6,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.warehouseandroid.contractoradd.view.ContractorAddScreen
 import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScreen
+import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.home.view.HomeScreen
 import com.example.warehouseandroid.ui.ErrorToast
+
 
 @Composable
 fun Navigation() {
@@ -23,7 +25,7 @@ fun Navigation() {
                     navController.navigate(Screen.ContractorDetails.route + "/$contractorId")
                 },
                 onAddContractorClick = {
-                    navController.navigate(Screen.ContractorEdit.route)
+                    navController.navigate(Screen.ContractorAdd.route)
                 }
             )
         }
@@ -31,13 +33,25 @@ fun Navigation() {
             val contractorIdString = backStackEntry.arguments?.getString("contractorId")
             val contractorId = contractorIdString?.toLongOrNull()
             if (contractorId != null) {
-                ContractorDetailsScreen(contractorId = contractorId) { navController.popBackStack() }
+                ContractorDetailsScreen(
+                    contractorId = contractorId,
+                    onGoBackRequested = { navController.popBackStack() },
+                    onEditContractorClick = { contractorJson -> navController.navigate(Screen.ContractorEdit.route + "/$contractorJson") })
             } else {
                 //todo
-                ErrorToast(errorMessage = "Contractor id is null")
+                ErrorToast(errorMessage = "Error: Contractor id is null")
             }
         }
-        composable(route = Screen.ContractorEdit.route) {
+        composable(route = Screen.ContractorEdit.route + "/{contractorJson}") { backStackEntry ->
+            val contractorJson = backStackEntry.arguments?.getString("contractorJson")
+            if (contractorJson != null) {
+                ContractorEditScreen(contractorJson = contractorJson) { navController.popBackStack() }
+            } else {
+                //todo
+                ErrorToast(errorMessage = "Error: Contractor is null")
+            }
+        }
+        composable(route = Screen.ContractorAdd.route) {
             ContractorAddScreen { navController.popBackStack() }
         }
     }

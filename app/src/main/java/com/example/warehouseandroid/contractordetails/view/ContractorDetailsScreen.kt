@@ -34,12 +34,18 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun ContractorDetailsScreen(contractorId: Long, onGoBackRequested: () -> Unit) {
+fun ContractorDetailsScreen(
+    contractorId: Long,
+    onGoBackRequested: () -> Unit,
+    onEditContractorClick: (String) -> Unit
+) {
     val viewModel = koinViewModel<ContractorDetailsViewModel> { parametersOf(contractorId) }
     val contractor by viewModel.contractorFlow.collectAsState()
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
+    //todo
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val goBack by viewModel.goBack.collectAsStateWithLifecycle()
+    //todo
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
 
     Scaffold(topBar = {
@@ -50,7 +56,7 @@ fun ContractorDetailsScreen(contractorId: Long, onGoBackRequested: () -> Unit) {
                 titleContentColor = MaterialTheme.colorScheme.primary
             ),
             actions = {
-                IconButton(onClick = { viewModel.onEditClick() }) {
+                IconButton(onClick = { onEditContractorClick(viewModel.serializeContractor()) }) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = stringResource(id = R.string.edit_contractor)

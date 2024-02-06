@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("io.realm.kotlin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
@@ -76,6 +77,9 @@ dependencies {
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //gson
+    implementation("com.google.code.gson:gson:2.8.8")
 
     //realm
     implementation("io.realm.kotlin:library-base:1.11.0")

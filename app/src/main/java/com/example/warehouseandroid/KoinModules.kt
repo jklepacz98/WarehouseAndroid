@@ -10,7 +10,9 @@ import com.example.warehouseandroid.contractor.remote.ContractorRemoteDataSource
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteRepository
 import com.example.warehouseandroid.contractoradd.viewmodel.ContractorAddViewModel
 import com.example.warehouseandroid.contractordetails.viewmodel.ContractorDetailsViewModel
+import com.example.warehouseandroid.contractoredit.viewmodel.ContractorEditViewModel
 import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewModel
+import com.google.gson.Gson
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -35,6 +37,7 @@ val databaseModule = module {
         Realm.open(configuration)
     }
     single { ContractorDao(get()) }
+    single { Gson() }
 }
 
 val repositoryModule = module {
@@ -46,6 +49,7 @@ val repositoryModule = module {
 
 val viewModelModule = module {
     viewModel { ContractorListViewModel(get()) }
-    viewModel { (contractorId: Long) -> ContractorDetailsViewModel(get(), contractorId) }
+    viewModel { (contractorId: Long) -> ContractorDetailsViewModel(get(), get(), contractorId) }
     viewModel { ContractorAddViewModel(get()) }
+    viewModel { (contractorJson: String) -> ContractorEditViewModel(get(), get(), contractorJson) }
 }
