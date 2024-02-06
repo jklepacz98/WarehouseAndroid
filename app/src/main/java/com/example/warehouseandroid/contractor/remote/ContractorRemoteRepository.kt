@@ -17,7 +17,4 @@ class ContractorRemoteRepository(private val apiService: ApiService) : Contracto
 
     override suspend fun putContractor(id: Long, contractor: Contractor): ApiResult<Contractor> =
         handleApi { apiService.putContractor(id, contractor) }
-
-    override suspend fun deleteContractor(id: Long): ApiResult<Unit> =
-        handleApi { apiService.deleteContractor(id) }
 }

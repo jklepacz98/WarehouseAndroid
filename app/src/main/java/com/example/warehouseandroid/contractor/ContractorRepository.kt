@@ -49,14 +49,11 @@ class ContractorRepository(
         }
     }
 
-    override suspend fun deleteContractor(id: Long): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
-        val networkResult = contractorRemoteDataSource.deleteContractor(id)
-        when (networkResult) {
-            //todo
-            is ApiResult.Success -> emit(Resource.Success(Unit))
-            is ApiResult.Error -> emit(Resource.Error(networkResult.message))
-            is ApiResult.Exception -> emit(Resource.Error(networkResult.e.message ?: UNKNOWN_ERROR))
+    private suspend fun FlowCollector<Resource<Unit>>.deleteContractorEntity(id: Long) {
+        val localResult = contractorLocalDataSource.deleteContractor(id)
+        when (localResult) {
+            is DatabaseResult.Success -> emit(Resource.Success(Unit))
+            is DatabaseResult.Error -> emit(Resource.Error(localResult.e.message ?: UNKNOWN_ERROR))
         }
     }
 

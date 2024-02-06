@@ -8,5 +8,4 @@ interface ContractorRemoteDataSource {
     suspend fun getContractor(id: Long): ApiResult<Contractor>
     suspend fun postContractor(contractor: Contractor): ApiResult<Contractor>
     suspend fun putContractor(id: Long, newContractor: Contractor): ApiResult<Contractor>
-    suspend fun deleteContractor(id: Long): ApiResult<Unit>
 }

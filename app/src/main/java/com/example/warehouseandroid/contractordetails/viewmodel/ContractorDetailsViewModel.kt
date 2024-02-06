@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.contractor.Contractor
 import com.example.warehouseandroid.contractor.ContractorDataSource
 import com.example.warehouseandroid.util.Resource
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -16,23 +17,27 @@ class ContractorDetailsViewModel(
     val contractorFlow: MutableStateFlow<Contractor?> = MutableStateFlow(null)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var observeContractorJob: Job? = null
+    val goBack: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
-
         //todo
         fetchContractor()
-        observeContractor()
+        startObservingContractor()
     }
 
     fun refresh() {
         fetchContractor()
     }
 
+    fun onEditClick() {
+        //todo
+    }
+
     private fun fetchContractor() {
         viewModelScope.launch {
             contractorDataSource.getContractor(contractorId).collect { resource ->
                 when (resource) {
-                    //todo
                     is Resource.Success -> {
                         isRefreshing.value = false
                     }
@@ -42,32 +47,24 @@ class ContractorDetailsViewModel(
                         isRefreshing.value = false
                     }
 
-                    is Resource.Loading -> {
-                        isRefreshing.value = true
-                    }
+                    is Resource.Loading -> isRefreshing.value = true
                 }
             }
         }
     }
 
-    private fun observeContractor() {
+
+    private fun startObservingContractor() {
         viewModelScope.launch {
             contractorDataSource.observeContractor(contractorId).collect() { resource ->
                 when (resource) {
-                    is Resource.Success -> {
-                        //todo
-                        contractorFlow.value = resource.data
-                    }
-                    //todo
-                    is Resource.Error -> {
-                        errorFlow.value = resource.message
-                    }
-                    //todo
-                    is Resource.Loading -> {
-
-                    }
+                    is Resource.Success -> contractorFlow.value = resource.data
+                    is Resource.Error -> errorFlow.value = resource.message
+                    is Resource.Loading -> {}
                 }
             }
         }
     }
 }
+
+

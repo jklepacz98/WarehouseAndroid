@@ -4,7 +4,6 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.SingleQueryChange
 import io.realm.kotlin.query.RealmResults
-import io.realm.kotlin.query.RealmSingleQuery
 import kotlinx.coroutines.flow.Flow
 
 class ContractorDao(private val realm: Realm) {
@@ -23,11 +22,9 @@ class ContractorDao(private val realm: Realm) {
         }
     }
 
-    private fun queryContractor(id: Long?): RealmSingleQuery<ContractorEntity> =
-        realm.query(CLASS_NAME, "id == $0", id).first()
-
+    //todo Not sure if query is right
     fun observeContractor(id: Long): Flow<SingleQueryChange<ContractorEntity>> =
-        queryContractor(id).asFlow()
+        realm.query(CLASS_NAME, "id == $0", id).first().asFlow()
 
     suspend fun insertContractor(contractorEntity: ContractorEntity) {
         realm.write {
@@ -37,7 +34,7 @@ class ContractorDao(private val realm: Realm) {
 
     suspend fun deleteContractor(id: Long) {
         realm.write {
-            delete(queryContractor(id))
+            delete(this.query(CLASS_NAME, "id == $0", id).first())
         }
     }
 

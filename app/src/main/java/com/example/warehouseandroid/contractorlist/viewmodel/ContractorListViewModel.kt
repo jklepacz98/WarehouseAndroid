@@ -56,7 +56,9 @@ class ContractorListViewModel(private val contractorDataSource: ContractorDataSo
                         contractorListFlow.value = resource.data
                     }
                     //todo
-                    is Resource.Error -> {}
+                    is Resource.Error -> {
+                        errorFlow.value = resource.message
+                    }
                     //todo
                     is Resource.Loading -> {}
                 }

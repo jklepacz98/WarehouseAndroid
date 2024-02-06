@@ -4,5 +4,9 @@
     <string name="no_symbol">No symbol</string>
     <string name="unknown_error">Unknown error</string>
     <string name="contractors">Contractors</string>
+    <string name="contractor">Contractor</string>
     <string name="receipt_documents">Receipt documents</string>
+    <string name="home_screen">Home</string>
+    <string name="add_contractor">Add contractor</string>
+    <string name="edit_contractor">Edit contractor</string>
 </resources>

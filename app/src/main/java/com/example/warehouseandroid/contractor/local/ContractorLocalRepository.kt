@@ -21,6 +21,7 @@ class ContractorLocalRepository(private val contactorDao: ContractorDao) :
                 if (contractorEntity != null) {
                     emit(DatabaseResult.Success(contractorEntity))
                 } else {
+                    //todo
                     throw Exception(CONTRACTOR_NOT_FOUND)
                 }
             }
