@@ -109,8 +109,8 @@ fun ContractorCard(contractor: Contractor, onClick: (Long) -> Unit) {
             .fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = contractor.name ?: stringResource(R.string.no_name))
             Text(text = contractor.symbol ?: stringResource(R.string.no_symbol))
+            Text(text = contractor.name ?: stringResource(R.string.no_name))
         }
     }
 }
