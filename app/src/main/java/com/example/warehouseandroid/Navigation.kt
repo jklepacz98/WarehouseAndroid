@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.warehouseandroid.contractoradd.view.ContractorAddScreen
 import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScreen
-import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.home.view.HomeScreen
 import com.example.warehouseandroid.ui.ErrorToast
@@ -38,7 +38,7 @@ fun Navigation() {
             }
         }
         composable(route = Screen.ContractorEdit.route) {
-            ContractorEditScreen()
+            ContractorAddScreen { navController.popBackStack() }
         }
     }
 }

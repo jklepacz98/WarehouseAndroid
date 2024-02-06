@@ -9,4 +9,6 @@
     <string name="home_screen">Home</string>
     <string name="add_contractor">Add contractor</string>
     <string name="edit_contractor">Edit contractor</string>
+    <string name="symbol">Symbol</string>
+    <string name="name">Name</string>
 </resources>

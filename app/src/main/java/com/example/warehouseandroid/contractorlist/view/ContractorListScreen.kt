@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class
+)
 
 package com.example.warehouseandroid.contractorlist.view
 
@@ -39,7 +41,6 @@ import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewM
 import com.example.warehouseandroid.ui.ErrorToast
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContractorListScreen(onContractorClick: (Long) -> Unit, onAddContractorClick: () -> Unit) {
     val viewModel = koinViewModel<ContractorListViewModel>()
@@ -48,7 +49,7 @@ fun ContractorListScreen(onContractorClick: (Long) -> Unit, onAddContractorClick
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
 
-
+    ErrorToast(errorMessage)
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(stringResource(id = R.string.contractors)) },
@@ -69,13 +70,9 @@ fun ContractorListScreen(onContractorClick: (Long) -> Unit, onAddContractorClick
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             ContractorsLazyColumn(
-                contractors,
-                pullRefreshState,
-                refreshing,
-                onContractorClick
+                contractors, pullRefreshState, refreshing, onContractorClick
             )
         }
-        ErrorToast(errorMessage)
     }
 }
 
@@ -104,13 +101,10 @@ fun ContractorsLazyColumn(
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContractorCard(contractor: Contractor, onClick: (Long) -> Unit) {
     Card(
-        onClick = { onClick(contractor.id) },
-        modifier = Modifier
+        onClick = { onClick(contractor.id) }, modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
