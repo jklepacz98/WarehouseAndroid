@@ -12,6 +12,14 @@ import com.example.warehouseandroid.contractoradd.viewmodel.ContractorAddViewMod
 import com.example.warehouseandroid.contractordetails.viewmodel.ContractorDetailsViewModel
 import com.example.warehouseandroid.contractoredit.viewmodel.ContractorEditViewModel
 import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewModel
+import com.example.warehouseandroid.documentitem.DocumentItemDataSource
+import com.example.warehouseandroid.documentitem.DocumentItemRepository
+import com.example.warehouseandroid.documentitem.local.DocumentItemDao
+import com.example.warehouseandroid.documentitem.local.DocumentItemEntity
+import com.example.warehouseandroid.documentitem.local.DocumentItemLocalDataSource
+import com.example.warehouseandroid.documentitem.local.DocumentItemLocalRepository
+import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteDataSource
+import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteRepository
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentRepository
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentDao
@@ -43,17 +51,14 @@ val apiModule = module {
 val databaseModule = module {
     single {
         //todo
-//        val schema = setOf(ContractorEntity::class, ReceiptDocumentEntity::class)
-        val configuration = RealmConfiguration.create(
-            schema = setOf(
-                ContractorEntity::class,
-                ReceiptDocumentEntity::class
-            )
-        )
+        val schema =
+            setOf(ContractorEntity::class, ReceiptDocumentEntity::class, DocumentItemEntity::class)
+        val configuration = RealmConfiguration.create(schema = schema)
         Realm.open(configuration)
     }
     single { ContractorDao(get()) }
     single { ReceiptDocumentDao(get()) }
+    single { DocumentItemDao(get()) }
     single { Gson() }
 }
 
@@ -65,6 +70,9 @@ val repositoryModule = module {
     single<ReceiptDocumentRemoteDataSource> { ReceiptDocumentRemoteRepository(get()) }
     single<ReceiptDocumentLocalDataSource> { ReceiptDocumentLocalRepository(get()) }
     single<ReceiptDocumentDataSource> { ReceiptDocumentRepository(get(), get()) }
+    single<DocumentItemLocalDataSource> { DocumentItemLocalRepository(get()) }
+    single<DocumentItemRemoteDataSource> { DocumentItemRemoteRepository(get()) }
+    single<DocumentItemDataSource> { DocumentItemRepository(get(), get()) }
 }
 
 val viewModelModule = module {

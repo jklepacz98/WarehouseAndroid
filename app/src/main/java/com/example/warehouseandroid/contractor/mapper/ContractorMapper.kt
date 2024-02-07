@@ -3,7 +3,7 @@ package com.example.warehouseandroid.contractor.mapper
 import com.example.warehouseandroid.contractor.Contractor
 import com.example.warehouseandroid.contractor.local.ContractorEntity
 
-class ContractorEntityMapper {
+class ContractorMapper {
     companion object {
         fun mapToContractorEntity(contractor: Contractor): ContractorEntity {
             return ContractorEntity().apply {

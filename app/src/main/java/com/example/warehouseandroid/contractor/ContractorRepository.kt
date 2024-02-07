@@ -1,7 +1,7 @@
 package com.example.warehouseandroid.contractor
 
 import com.example.warehouseandroid.contractor.local.ContractorLocalDataSource
-import com.example.warehouseandroid.contractor.mapper.ContractorEntityMapper
+import com.example.warehouseandroid.contractor.mapper.ContractorMapper
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteDataSource
 import com.example.warehouseandroid.util.ApiResult
 import com.example.warehouseandroid.util.DatabaseResult
@@ -48,30 +48,13 @@ class ContractorRepository(
         }
     }
 
-    private suspend fun FlowCollector<Resource<Contractor>>.clearCache(data: Contractor) {
-        val result = contractorLocalDataSource.deleteContractor(data.id)
-        when (result) {
-            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is DatabaseResult.Success -> fillCache(data)
-        }
-    }
-
-    private suspend fun FlowCollector<Resource<Contractor>>.fillCache(data: Contractor) {
-        val contractorEntity = ContractorEntityMapper.mapToContractorEntity(data)
-        val result = contractorLocalDataSource.insertContractor(contractorEntity)
-        when (result) {
-            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            is DatabaseResult.Success -> emit(Resource.Success(data))
-        }
-    }
-
     override suspend fun observeContractor(id: Long): Flow<Resource<Contractor>> = flow {
         emit(Resource.Loading())
 
         contractorLocalDataSource.observeContractor(id).collect { result ->
             when (result) {
                 is DatabaseResult.Success -> {
-                    val contractorList = ContractorEntityMapper.mapToContractor(result.data)
+                    val contractorList = ContractorMapper.mapToContractor(result.data)
                     emit(Resource.Success(contractorList))
                 }
 
@@ -90,6 +73,37 @@ class ContractorRepository(
         }
     }
 
+    override suspend fun observeAllContractors(): Flow<Resource<List<Contractor>>> = flow {
+        emit(Resource.Loading())
+        contractorLocalDataSource.observeAllContractors().collect { result ->
+            when (result) {
+                is DatabaseResult.Success -> {
+                    val contractorList = ContractorMapper.mapToContractors(result.data)
+                    emit(Resource.Success(contractorList))
+                }
+
+                is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            }
+        }
+    }
+
+    private suspend fun FlowCollector<Resource<Contractor>>.clearCache(data: Contractor) {
+        val result = contractorLocalDataSource.deleteContractor(data.id)
+        when (result) {
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> fillCache(data)
+        }
+    }
+
+    private suspend fun FlowCollector<Resource<Contractor>>.fillCache(data: Contractor) {
+        val contractorEntity = ContractorMapper.mapToContractorEntity(data)
+        val result = contractorLocalDataSource.insertContractor(contractorEntity)
+        when (result) {
+            is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
+            is DatabaseResult.Success -> emit(Resource.Success(data))
+        }
+    }
+
     private suspend fun FlowCollector<Resource<List<Contractor>>>.clearCache(data: List<Contractor>) {
         val result = contractorLocalDataSource.deleteAllContractors()
         when (result) {
@@ -99,26 +113,11 @@ class ContractorRepository(
     }
 
     private suspend fun FlowCollector<Resource<List<Contractor>>>.fillCache(data: List<Contractor>) {
-        val contractorEntityList = ContractorEntityMapper.mapToContractorEntities(data)
+        val contractorEntityList = ContractorMapper.mapToContractorEntities(data)
         val result = contractorLocalDataSource.insertContractors(contractorEntityList)
         when (result) {
             is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
             is DatabaseResult.Success -> emit(Resource.Success(data))
-        }
-    }
-
-
-    override suspend fun observeAllContractors(): Flow<Resource<List<Contractor>>> = flow {
-        emit(Resource.Loading())
-        contractorLocalDataSource.observeAllContractors().collect { result ->
-            when (result) {
-                is DatabaseResult.Success -> {
-                    val contractorList = ContractorEntityMapper.mapToContractors(result.data)
-                    emit(Resource.Success(contractorList))
-                }
-
-                is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
-            }
         }
     }
 

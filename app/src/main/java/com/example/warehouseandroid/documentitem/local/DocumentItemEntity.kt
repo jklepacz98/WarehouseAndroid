@@ -1,8 +1,8 @@
 package com.example.warehouseandroid.documentitem.local
 
-import io.realm.kotlin.types.EmbeddedRealmObject
+import io.realm.kotlin.types.RealmObject
 
-class DocumentItemEntity : EmbeddedRealmObject {
+class DocumentItemEntity : RealmObject {
     var id: Long? = null
     var productName: String? = null
     var unitOfMeasure: String? = null

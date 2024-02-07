@@ -1,11 +1,11 @@
 package com.example.warehouseandroid.receiptdocument.mapper
 
 import com.example.warehouseandroid.contractor.Contractor
-import com.example.warehouseandroid.contractor.mapper.ContractorEntityMapper
+import com.example.warehouseandroid.contractor.mapper.ContractorMapper
 import com.example.warehouseandroid.receiptdocument.ReceiptDocument
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentEntity
 
-class ReceiptDocumentEntityMapper {
+class ReceiptDocumentMapper {
     companion object {
         fun mapToReceiptDocumentEntity(receiptDocument: ReceiptDocument): ReceiptDocumentEntity {
             return ReceiptDocumentEntity().apply {
@@ -14,7 +14,7 @@ class ReceiptDocumentEntityMapper {
                 //todo
                 if (receiptDocument.contractor != null) {
                     contractorEntity =
-                        ContractorEntityMapper.mapToContractorEntity(receiptDocument.contractor)
+                        ContractorMapper.mapToContractorEntity(receiptDocument.contractor)
                 }
             }
         }
@@ -25,7 +25,7 @@ class ReceiptDocumentEntityMapper {
         fun mapToReceiptDocument(receiptDocumentEntity: ReceiptDocumentEntity): ReceiptDocument {
             val contractorEntity = receiptDocumentEntity.contractorEntity
             val contractor: Contractor? = if (contractorEntity != null) {
-                ContractorEntityMapper.mapToContractor(contractorEntity)
+                ContractorMapper.mapToContractor(contractorEntity)
             } else {
                 null
             }

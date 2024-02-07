@@ -1,7 +1,7 @@
 package com.example.warehouseandroid.receiptdocument
 
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalDataSource
-import com.example.warehouseandroid.receiptdocument.mapper.ReceiptDocumentEntityMapper
+import com.example.warehouseandroid.receiptdocument.mapper.ReceiptDocumentMapper
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteDataSource
 import com.example.warehouseandroid.util.ApiResult
 import com.example.warehouseandroid.util.DatabaseResult
@@ -90,7 +90,7 @@ class ReceiptDocumentRepository(
 
     private suspend fun FlowCollector<Resource<List<ReceiptDocument>>>.fillCache(data: List<ReceiptDocument>) {
         val receiptDocumentEntityList =
-            ReceiptDocumentEntityMapper.mapToReceiptDocumentEntities(data)
+            ReceiptDocumentMapper.mapToReceiptDocumentEntities(data)
         val result =
             receiptDocumentLocalDataSource.insertReceiptDocuments(receiptDocumentEntityList)
         when (result) {
@@ -103,7 +103,7 @@ class ReceiptDocumentRepository(
     }
 
     private suspend fun FlowCollector<Resource<ReceiptDocument>>.fillCache(data: ReceiptDocument) {
-        val receiptDocumentEntity = ReceiptDocumentEntityMapper.mapToReceiptDocumentEntity(data)
+        val receiptDocumentEntity = ReceiptDocumentMapper.mapToReceiptDocumentEntity(data)
         val result = receiptDocumentLocalDataSource.insertReceiptDocument(receiptDocumentEntity)
         when (result) {
             is DatabaseResult.Error -> emit(Resource.Error(result.e.message ?: UNKNOWN_ERROR))
@@ -119,7 +119,7 @@ class ReceiptDocumentRepository(
                 when (result) {
                     is DatabaseResult.Success -> {
                         val receiptDocumentList =
-                            ReceiptDocumentEntityMapper.mapToReceiptDocuments(result.data)
+                            ReceiptDocumentMapper.mapToReceiptDocuments(result.data)
                         emit(Resource.Success(receiptDocumentList))
                     }
 
@@ -138,7 +138,7 @@ class ReceiptDocumentRepository(
             when (result) {
                 is DatabaseResult.Success -> {
                     val receiptDocumentList =
-                        ReceiptDocumentEntityMapper.mapToReceiptDocument(result.data)
+                        ReceiptDocumentMapper.mapToReceiptDocument(result.data)
                     emit(Resource.Success(receiptDocumentList))
                 }
 
