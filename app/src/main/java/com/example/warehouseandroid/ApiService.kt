@@ -1,6 +1,7 @@
 package com.example.warehouseandroid
 
 import com.example.warehouseandroid.contractor.Contractor
+import com.example.warehouseandroid.receiptdocument.ReceiptDocument
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,6 +24,21 @@ interface ApiService {
         @Path("id") id: Long,
         @Body contractor: Contractor
     ): Response<Contractor>
+
+    @GET("receipt-document")
+    suspend fun getAllReceiptDocuments(): Response<List<ReceiptDocument>>
+
+    @GET("receipt-document/{id}")
+    suspend fun getReceiptDocument(@Path("id") id: Long): Response<ReceiptDocument>
+
+    @POST("receipt-document")
+    suspend fun postReceiptDocument(@Body receiptDocument: ReceiptDocument): Response<ReceiptDocument>
+
+    @PUT("receipt-document/id")
+    suspend fun putReceiptDocument(
+        @Path("id") id: Long,
+        @Body receiptDocument: ReceiptDocument
+    ): Response<ReceiptDocument>
 
     companion object {
         const val BASE_URL = "https://spring-warehouse.onrender.com"
