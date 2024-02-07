@@ -1,52 +1,53 @@
-package com.example.warehouseandroid.contractorlist.viewmodel
+package com.example.warehouseandroid.receiptdocumentlist.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.warehouseandroid.contractor.Contractor
-import com.example.warehouseandroid.contractor.ContractorDataSource
+import com.example.warehouseandroid.receiptdocument.ReceiptDocument
+import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
 import com.example.warehouseandroid.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class ContractorListViewModel(private val contractorDataSource: ContractorDataSource) :
+class ReceiptDocumentListViewModel(private val receiptDocumentDataSource: ReceiptDocumentDataSource) :
     ViewModel() {
 
-    val contractorListFlow: MutableStateFlow<List<Contractor>> = MutableStateFlow(emptyList())
+    val receiptDocumentListFlow: MutableStateFlow<List<ReceiptDocument>> =
+        MutableStateFlow(emptyList())
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
-        getAllContractors()
-        observeAllContractors()
+        getAllReceiptDocuments()
+        observeAllReceiptDocuments()
     }
 
     fun refresh() {
-        getAllContractors()
+        getAllReceiptDocuments()
     }
 
-    //todo change name
-    private fun getAllContractors() {
+    private fun getAllReceiptDocuments() {
         viewModelScope.launch {
-            contractorDataSource.getAllContractors().collect { resource ->
+            receiptDocumentDataSource.getAllReceiptDocuments().collect() { resource ->
                 when (resource) {
-                    //todo
                     is Resource.Success -> isRefreshing.value = false
                     is Resource.Error -> {
                         errorFlow.value = resource.message
                         isRefreshing.value = false
                     }
 
-                    is Resource.Loading -> isRefreshing.value = true
+                    is Resource.Loading -> {
+                        isRefreshing.value = true
+                    }
                 }
             }
         }
     }
 
-    private fun observeAllContractors() {
+    private fun observeAllReceiptDocuments() {
         viewModelScope.launch {
-            contractorDataSource.observeAllContractors().collect() { resource ->
+            receiptDocumentDataSource.observeAllReceiptDocuments().collect() { resource ->
                 when (resource) {
-                    is Resource.Success -> contractorListFlow.value = resource.data
+                    is Resource.Success -> receiptDocumentListFlow.value = resource.data
                     is Resource.Error -> errorFlow.value = resource.message
                     is Resource.Loading -> {}
                 }

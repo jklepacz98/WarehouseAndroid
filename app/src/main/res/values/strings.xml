@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WarehouseAndroid</string>
-    <string name="no_name">No name</string>
     <string name="no_symbol">No symbol</string>
+    <string name="no_name">No name</string>
     <string name="unknown_error">Unknown error</string>
     <string name="contractors">Contractors</string>
     <string name="contractor">Contractor</string>
@@ -11,4 +11,7 @@
     <string name="edit_contractor">Edit contractor</string>
     <string name="symbol">Symbol</string>
     <string name="name">Name</string>
+    <string name="receipt_document">Receipt document</string>
+    <string name="add_receipt_document">Add receipt document</string>
+    <string name="edit_receipt_document">Edit receipt document</string>
 </resources>

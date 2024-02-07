@@ -32,7 +32,7 @@ class ReceiptDocumentDao(private val realm: Realm) {
         }
     }
 
-    suspend fun deleteReceipt(id: Long) {
+    suspend fun deleteReceiptDocument(id: Long) {
         realm.write {
             delete(this.query(CLASS_NAME, "id == $0", id).first())
         }

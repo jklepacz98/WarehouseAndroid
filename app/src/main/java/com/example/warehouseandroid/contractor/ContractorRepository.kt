@@ -48,14 +48,6 @@ class ContractorRepository(
         }
     }
 
-    private suspend fun FlowCollector<Resource<Unit>>.deleteContractorEntity(id: Long) {
-        val localResult = contractorLocalDataSource.deleteContractor(id)
-        when (localResult) {
-            is DatabaseResult.Success -> emit(Resource.Success(Unit))
-            is DatabaseResult.Error -> emit(Resource.Error(localResult.e.message ?: UNKNOWN_ERROR))
-        }
-    }
-
     private suspend fun FlowCollector<Resource<Contractor>>.clearCache(data: Contractor) {
         val result = contractorLocalDataSource.deleteContractor(data.id)
         when (result) {
@@ -95,7 +87,6 @@ class ContractorRepository(
             is ApiResult.Success -> clearCache(networkResult.data)
             is ApiResult.Error -> emit(Resource.Error(networkResult.message))
             is ApiResult.Exception -> emit(Resource.Error(networkResult.e.message ?: UNKNOWN_ERROR))
-
         }
     }
 
@@ -133,6 +124,6 @@ class ContractorRepository(
 
     //todo
     companion object {
-        private const val UNKNOWN_ERROR: String = "UnknownError"
+        private const val UNKNOWN_ERROR: String = "Unknown Error"
     }
 }

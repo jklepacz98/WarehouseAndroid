@@ -12,6 +12,6 @@ interface ReceiptDocumentDataSource {
     ): Flow<Resource<ReceiptDocument>>
 
     suspend fun getAllReceiptDocuments(): Flow<Resource<List<ReceiptDocument>>>
-    suspend fun observeAllContractors(): Flow<Resource<List<ReceiptDocument>>>
-    suspend fun observeContractor(id: Long): Flow<Resource<List<ReceiptDocument>>>
+    suspend fun observeAllReceiptDocuments(): Flow<Resource<List<ReceiptDocument>>>
+    suspend fun observeReceiptDocument(id: Long): Flow<Resource<ReceiptDocument>>
 }

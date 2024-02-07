@@ -15,10 +15,12 @@ import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewM
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentRepository
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentDao
+import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentEntity
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalDataSource
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalRepository
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteDataSource
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteRepository
+import com.example.warehouseandroid.receiptdocumentlist.viewmodel.ReceiptDocumentListViewModel
 import com.google.gson.Gson
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -40,7 +42,14 @@ val apiModule = module {
 
 val databaseModule = module {
     single {
-        val configuration = RealmConfiguration.create(schema = setOf(ContractorEntity::class))
+        //todo
+//        val schema = setOf(ContractorEntity::class, ReceiptDocumentEntity::class)
+        val configuration = RealmConfiguration.create(
+            schema = setOf(
+                ContractorEntity::class,
+                ReceiptDocumentEntity::class
+            )
+        )
         Realm.open(configuration)
     }
     single { ContractorDao(get()) }
@@ -63,4 +72,5 @@ val viewModelModule = module {
     viewModel { (contractorId: Long) -> ContractorDetailsViewModel(get(), get(), contractorId) }
     viewModel { ContractorAddViewModel(get()) }
     viewModel { (contractorJson: String) -> ContractorEditViewModel(get(), get(), contractorJson) }
+    viewModel { ReceiptDocumentListViewModel(get()) }
 }

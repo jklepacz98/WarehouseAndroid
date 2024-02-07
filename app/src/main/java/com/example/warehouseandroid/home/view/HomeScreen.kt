@@ -19,7 +19,7 @@ import com.example.warehouseandroid.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onContractorsButtonClick: () -> Unit) {
+fun HomeScreen(onContractorsButtonClick: () -> Unit, onReceiptDocumentsButtonClick: () -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(stringResource(id = R.string.home_screen)) },
@@ -32,6 +32,7 @@ fun HomeScreen(onContractorsButtonClick: () -> Unit) {
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 HomeCard(stringResource(R.string.contractors), onContractorsButtonClick)
+                HomeCard(stringResource(R.string.receipt_documents), onReceiptDocumentsButtonClick)
             }
         }
     }

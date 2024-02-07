@@ -27,7 +27,6 @@ class ContractorLocalRepository(private val contactorDao: ContractorDao) :
         }
     }
 
-
     override suspend fun insertContractors(contractors: List<ContractorEntity>): DatabaseResult<Unit> =
         handleDatabase { contactorDao.insertContractors(contractors) }
 
@@ -42,10 +41,5 @@ class ContractorLocalRepository(private val contactorDao: ContractorDao) :
         } catch (e: Exception) {
             emit(DatabaseResult.Error(e))
         }
-
-    }
-
-    companion object {
-        private const val CONTRACTOR_NOT_FOUND: String = "Contractor not found"
     }
 }

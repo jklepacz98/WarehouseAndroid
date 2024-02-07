@@ -9,6 +9,7 @@ import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScre
 import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.home.view.HomeScreen
+import com.example.warehouseandroid.receiptdocumentlist.view.ReceiptDocumentListScreen
 import com.example.warehouseandroid.ui.ErrorToast
 
 
@@ -17,7 +18,10 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
-            HomeScreen { navController.navigate(Screen.ContractorList.route) }
+            HomeScreen(
+                onContractorsButtonClick = { navController.navigate(Screen.ContractorList.route) },
+                onReceiptDocumentsButtonClick = { navController.navigate(Screen.ReceiptDocumentList.route) }
+            )
         }
         composable(route = Screen.ContractorList.route) {
             ContractorListScreen(
@@ -53,6 +57,10 @@ fun Navigation() {
         }
         composable(route = Screen.ContractorAdd.route) {
             ContractorAddScreen { navController.popBackStack() }
+        }
+        composable(route = Screen.ReceiptDocumentList.route) {
+            // TODO:
+            ReceiptDocumentListScreen(onReceiptDocumentClick = {}, onAddReceiptDocumentClick = {})
         }
     }
 }
