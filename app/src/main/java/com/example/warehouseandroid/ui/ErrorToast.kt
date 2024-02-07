@@ -11,7 +11,7 @@ fun ErrorToast(errorMessage: String?) {
     val context = LocalContext.current
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             //todo
             Log.e("Error123", it)
         }
