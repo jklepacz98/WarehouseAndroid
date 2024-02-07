@@ -8,6 +8,7 @@ import com.example.warehouseandroid.contractoradd.view.ContractorAddScreen
 import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScreen
 import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
+import com.example.warehouseandroid.documentitemdetails.view.DocumentItemDetailsScreen
 import com.example.warehouseandroid.home.view.HomeScreen
 import com.example.warehouseandroid.receiptdocumentdetails.view.ReceiptDocumentDetailsScreen
 import com.example.warehouseandroid.receiptdocumentedit.view.ReceiptDocumentEditScreen
@@ -35,7 +36,6 @@ fun Navigation() {
             val contractorId = contractorIdString?.toLongOrNull()
             if (contractorId != null) {
                 ContractorDetailsScreen(contractorId = contractorId,
-                    onGoBackRequested = { navController.popBackStack() },
                     onEditContractorClick = { contractorJson -> navController.navigate(Screen.ContractorEdit.route + "/$contractorJson") })
             } else {
                 //todo
@@ -66,7 +66,9 @@ fun Navigation() {
             val receiptDocumentId = receiptDocumentIdString?.toLongOrNull()
             if (receiptDocumentId != null) {
                 ReceiptDocumentDetailsScreen(
-                    onDocumentItemClick = {},
+                    onDocumentItemClick = { documentItemId ->
+                        navController.navigate(Screen.DocumentItemDetails.route + "/$documentItemId")
+                    },
                     onAddDocumentItemClick = {},
                     onEditReceiptDocumentClick = { receiptDocumentJson ->
                         navController.navigate(
@@ -86,6 +88,24 @@ fun Navigation() {
             } else {
                 //todo
                 ErrorToast(errorMessage = "Error: ReceiptDocument is null")
+            }
+        }
+        composable(route = Screen.DocumentItemDetails.route + "/{documentItemId}") { backStackEntry ->
+            val documentItemIdString = backStackEntry.arguments?.getString("documentItemId")
+            val documentItemId = documentItemIdString?.toLongOrNull()
+            if (documentItemId != null) {
+                DocumentItemDetailsScreen(
+                    onEditDocumentItemClick = { documentItemJson ->
+                        //todo
+//                        navController.navigate(
+//                            Screen.DocumentItemEdit.route + "/$documentItemJson"
+//                        )
+                    },
+                    documentItemId = documentItemId
+                )
+            } else {
+                //todo
+                ErrorToast(errorMessage = "Error: Document item id is null")
             }
         }
     }

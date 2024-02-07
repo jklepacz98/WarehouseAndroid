@@ -1,46 +1,38 @@
-package com.example.warehouseandroid.contractordetails.viewmodel
+package com.example.warehouseandroid.documentitemdetails.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.warehouseandroid.contractor.Contractor
-import com.example.warehouseandroid.contractor.ContractorDataSource
+import com.example.warehouseandroid.documentitem.DocumentItem
+import com.example.warehouseandroid.documentitem.DocumentItemDataSource
 import com.example.warehouseandroid.util.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class ContractorDetailsViewModel(
-    private val contractorDataSource: ContractorDataSource,
+class DocumentItemDetailsViewModel(
+    private val documentItemDataSource: DocumentItemDataSource,
     private val gson: Gson,
-    private val contractorId: Long
+    private val documentItemId: Long
 ) : ViewModel() {
 
-    val contractorFlow: MutableStateFlow<Contractor?> = MutableStateFlow(null)
+    val documentItemFlow: MutableStateFlow<DocumentItem?> = MutableStateFlow(null)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         //todo
-        fetchContractor()
-        observeContractor()
+        fetchDocumentItem()
+        observeDocumentItem()
     }
 
-    fun serializeContractor(): String {
-        val contractor = contractorFlow.value
-        return gson.toJson(contractor)
+    fun serializeDocumentItem(): String {
+        val documentItem = documentItemFlow.value
+        return gson.toJson(documentItem)
     }
 
-    fun refresh() {
-        fetchContractor()
-    }
-
-    fun onEditClick() {
-        //todo
-    }
-
-    private fun fetchContractor() {
+    private fun fetchDocumentItem() {
         viewModelScope.launch {
-            contractorDataSource.getContractor(contractorId).collect { resource ->
+            documentItemDataSource.getDocumentItem(documentItemId).collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         isRefreshing.value = false
@@ -58,11 +50,11 @@ class ContractorDetailsViewModel(
     }
 
 
-    private fun observeContractor() {
+    private fun observeDocumentItem() {
         viewModelScope.launch {
-            contractorDataSource.observeContractor(contractorId).collect() { resource ->
+            documentItemDataSource.observeDocumentItem(documentItemId).collect() { resource ->
                 when (resource) {
-                    is Resource.Success -> contractorFlow.value = resource.data
+                    is Resource.Success -> documentItemFlow.value = resource.data
                     is Resource.Error -> errorFlow.value = resource.message
                     is Resource.Loading -> {}
                 }
@@ -70,5 +62,3 @@ class ContractorDetailsViewModel(
         }
     }
 }
-
-

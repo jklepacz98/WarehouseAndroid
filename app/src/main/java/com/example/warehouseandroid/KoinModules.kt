@@ -20,6 +20,7 @@ import com.example.warehouseandroid.documentitem.local.DocumentItemLocalDataSour
 import com.example.warehouseandroid.documentitem.local.DocumentItemLocalRepository
 import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteDataSource
 import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteRepository
+import com.example.warehouseandroid.documentitemdetails.viewmodel.DocumentItemDetailsViewModel
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentRepository
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentDao
@@ -83,7 +84,6 @@ val viewModelModule = module {
     viewModel { (contractorJson: String) -> ContractorEditViewModel(get(), get(), contractorJson) }
 
     viewModel { ReceiptDocumentListViewModel(get()) }
-
     viewModel { (receiptDocumentId: Long) ->
         ReceiptDocumentDetailsViewModel(
             get(),
@@ -92,5 +92,18 @@ val viewModelModule = module {
             receiptDocumentId
         )
     }
-    viewModel {(receiptDocumentJson: String) -> ReceiptDocumentEditViewModel(get(),get(),receiptDocumentJson)}
+    viewModel { (receiptDocumentJson: String) ->
+        ReceiptDocumentEditViewModel(
+            get(),
+            get(),
+            receiptDocumentJson
+        )
+    }
+    viewModel { (documentItemId: Long) ->
+        DocumentItemDetailsViewModel(
+            get(),
+            get(),
+            documentItemId
+        )
+    }
 }
