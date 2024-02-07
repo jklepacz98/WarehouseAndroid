@@ -41,11 +41,17 @@ fun HomeScreen(onContractorsButtonClick: () -> Unit) {
 @Composable
 fun HomeCard(title: String, onClick: () -> Unit) {
     Card(
-        onClick = onClick, modifier = Modifier
+        shape = MaterialTheme.shapes.medium,
+        onClick = onClick,
+        modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Text(text = title, modifier = Modifier.padding(16.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 

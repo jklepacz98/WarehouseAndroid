@@ -14,6 +14,7 @@ class ContractorAddViewModel(private val contractorDataSource: ContractorDataSou
     val name: MutableStateFlow<String> = MutableStateFlow("")
     val isContractorAdded: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun setSymbol(text: String) {
         symbol.value = text
@@ -23,7 +24,7 @@ class ContractorAddViewModel(private val contractorDataSource: ContractorDataSou
         name.value = text
     }
 
-    fun PostContractor() {
+    fun postContractor() {
         val contractor = Contractor(0, symbol.value, name.value)
         viewModelScope.launch {
             contractorDataSource.postContractor(contractor).collect { resource ->
@@ -31,14 +32,17 @@ class ContractorAddViewModel(private val contractorDataSource: ContractorDataSou
                     //todo
                     is Resource.Success -> {
                         isContractorAdded.value = true
+                        isLoading.value = false
                     }
 
                     is Resource.Error -> {
                         errorFlow.value = resource.message
-
+                        isLoading.value = false
                     }
 
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        isLoading.value = true
+                    }
                 }
             }
         }

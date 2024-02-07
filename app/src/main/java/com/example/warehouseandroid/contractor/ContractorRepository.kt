@@ -2,7 +2,6 @@ package com.example.warehouseandroid.contractor
 
 import com.example.warehouseandroid.contractor.local.ContractorLocalDataSource
 import com.example.warehouseandroid.contractor.mapper.ContractorEntityMapper
-import com.example.warehouseandroid.contractor.mapper.ContractorMapper
 import com.example.warehouseandroid.contractor.remote.ContractorRemoteDataSource
 import com.example.warehouseandroid.util.ApiResult
 import com.example.warehouseandroid.util.DatabaseResult
@@ -80,7 +79,7 @@ class ContractorRepository(
         contractorLocalDataSource.observeContractor(id).collect { result ->
             when (result) {
                 is DatabaseResult.Success -> {
-                    val contractorList = ContractorMapper.mapToContractor(result.data)
+                    val contractorList = ContractorEntityMapper.mapToContractor(result.data)
                     emit(Resource.Success(contractorList))
                 }
 
@@ -123,7 +122,7 @@ class ContractorRepository(
         contractorLocalDataSource.observeAllContractors().collect { result ->
             when (result) {
                 is DatabaseResult.Success -> {
-                    val contractorList = ContractorMapper.mapToContractors(result.data)
+                    val contractorList = ContractorEntityMapper.mapToContractors(result.data)
                     emit(Resource.Success(contractorList))
                 }
 

@@ -13,7 +13,7 @@ fun ErrorToast(errorMessage: String?) {
         errorMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             //todo
-            Log.e("TAG", it)
+            Log.e("Error", it)
         }
     }
 }

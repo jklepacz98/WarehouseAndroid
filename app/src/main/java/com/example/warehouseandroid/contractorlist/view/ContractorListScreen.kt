@@ -104,6 +104,7 @@ fun ContractorsLazyColumn(
 @Composable
 fun ContractorCard(contractor: Contractor, onClick: (Long) -> Unit) {
     Card(
+        shape = MaterialTheme.shapes.medium,
         onClick = { onClick(contractor.id) }, modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()

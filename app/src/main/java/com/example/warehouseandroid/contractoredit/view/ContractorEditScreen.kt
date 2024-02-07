@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -48,11 +52,19 @@ fun ContractorEditScreen(contractorJson: String, onGoBackRequested: () -> Unit) 
     ErrorToast(errorMessage)
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(stringResource(id = R.string.add_contractor)) },
+            title = { Text(stringResource(id = R.string.edit_contractor)) },
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary
-            )
+            ),
+            actions = {
+                IconButton(onClick = { (viewModel.putContractor()) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Save,
+                        contentDescription = stringResource(id = R.string.edit_contractor)
+                    )
+                }
+            },
         )
     }) { paddingValues ->
         Column(
@@ -72,7 +84,6 @@ fun ContractorEditScreen(contractorJson: String, onGoBackRequested: () -> Unit) 
                     .fillMaxWidth()
                     .padding(16.dp)
                     .focusRequester(focusRequesterSymbol)
-
             )
             OutlinedTextField(
                 value = name,
@@ -81,7 +92,7 @@ fun ContractorEditScreen(contractorJson: String, onGoBackRequested: () -> Unit) 
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     //todo
-                    onAny = { viewModel.PutContractor() }
+                    onAny = { viewModel.putContractor() }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

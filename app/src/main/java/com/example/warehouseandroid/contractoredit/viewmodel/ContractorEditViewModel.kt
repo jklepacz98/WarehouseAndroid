@@ -1,5 +1,7 @@
 package com.example.warehouseandroid.contractoredit.viewmodel
 
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.contractor.Contractor
@@ -15,27 +17,39 @@ class ContractorEditViewModel(
     private val contractorJson: String
 ) :
     ViewModel() {
-    val symbol: MutableStateFlow<String> = MutableStateFlow("")
-    val name: MutableStateFlow<String> = MutableStateFlow("")
+    val symbol: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
+    val name: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isContractorEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
-    val contractor = gson.fromJson(contractorJson, Contractor::class.java)
+    val contractor: Contractor = gson.fromJson(contractorJson, Contractor::class.java)
 
     init {
-        contractor.symbol?.let { setSymbol(it) }
-        contractor.name?.let { setName(it) }
+        contractor.symbol?.let {
+            val textFieldValue = TextFieldValue(
+                text = it,
+                selection = TextRange(it.length)
+            )
+            setSymbol(textFieldValue)
+        }
+        contractor.name?.let {
+            val textFieldValue = TextFieldValue(
+                text = it,
+                selection = TextRange(it.length)
+            )
+            setName(textFieldValue)
+        }
     }
 
-    fun setSymbol(text: String) {
-        symbol.value = text
+    fun setSymbol(textFieldValue: TextFieldValue) {
+        symbol.value = textFieldValue
     }
 
-    fun setName(text: String) {
-        name.value = text
+    fun setName(textFieldValue: TextFieldValue) {
+        name.value = textFieldValue
     }
 
-    fun PutContractor() {
-        val newContractor = Contractor(0, symbol.value, name.value)
+    fun putContractor() {
+        val newContractor = Contractor(0, symbol.value.text, name.value.text)
         val id = contractor.id
         viewModelScope.launch {
             contractorDataSource.putContractor(id, newContractor).collect { resource ->

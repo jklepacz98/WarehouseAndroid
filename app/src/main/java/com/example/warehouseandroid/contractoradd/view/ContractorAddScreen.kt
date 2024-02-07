@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -41,6 +45,7 @@ fun ContractorAddScreen(onGoBackRequested: () -> Unit) {
     val focusRequesterName = remember { FocusRequester() }
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
     val goBack by viewModel.isContractorAdded.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(goBack) {
         if (goBack) onGoBackRequested()
@@ -52,7 +57,15 @@ fun ContractorAddScreen(onGoBackRequested: () -> Unit) {
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary
-            )
+            ),
+            actions = {
+                IconButton(onClick = { viewModel.postContractor() }) {
+                    Icon(
+                        imageVector = Icons.Filled.Save,
+                        contentDescription = stringResource(id = R.string.add_contractor)
+                    )
+                }
+            },
         )
     }) { paddingValues ->
         Column(
@@ -60,6 +73,7 @@ fun ContractorAddScreen(onGoBackRequested: () -> Unit) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+
             OutlinedTextField(
                 value = symbol,
                 onValueChange = { viewModel.setSymbol(it) },
@@ -81,7 +95,7 @@ fun ContractorAddScreen(onGoBackRequested: () -> Unit) {
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     //todo
-                    onAny = { viewModel.PostContractor() }
+                    onAny = { viewModel.postContractor() }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

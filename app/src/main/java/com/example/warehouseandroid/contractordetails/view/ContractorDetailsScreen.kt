@@ -50,7 +50,7 @@ fun ContractorDetailsScreen(
 
     Scaffold(topBar = {
         TopAppBar(
-            title = { androidx.compose.material3.Text(stringResource(id = R.string.contractors)) },
+            title = { androidx.compose.material3.Text(stringResource(id = R.string.contractor)) },
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary
@@ -63,9 +63,7 @@ fun ContractorDetailsScreen(
                     )
                 }
             },
-
-
-            )
+        )
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             ErrorToast(errorMessage)
