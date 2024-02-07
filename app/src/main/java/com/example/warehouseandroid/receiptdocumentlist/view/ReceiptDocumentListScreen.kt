@@ -41,8 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ReceiptDocumentListScreen(
-    onReceiptDocumentClick: (Long) -> Unit,
-    onAddReceiptDocumentClick: () -> Unit
+    onReceiptDocumentClick: (Long) -> Unit, onAddReceiptDocumentClick: () -> Unit
 ) {
     val viewModel = koinViewModel<ReceiptDocumentListViewModel>()
     val receiptDocuments by viewModel.receiptDocumentListFlow.collectAsStateWithLifecycle()
@@ -106,12 +105,16 @@ fun ReceiptDocumentsLazyColumn(
 fun ReceiptDocumentCard(receiptDocument: ReceiptDocument, onClick: (Long) -> Unit) {
     Card(
         shape = MaterialTheme.shapes.medium,
-        onClick = { onClick(receiptDocument.id) }, modifier = Modifier
+        onClick = { onClick(receiptDocument.id) },
+        modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = receiptDocument.symbol ?: stringResource(R.string.no_symbol))
+            Text(
+                text = receiptDocument.symbol ?: stringResource(R.string.no_symbol),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
             Text(text = stringResource(R.string.contractor))
             Text(text = receiptDocument.contractor?.name ?: stringResource(R.string.no_name))
             Text(text = receiptDocument.contractor?.symbol ?: stringResource(R.string.no_symbol))
