@@ -12,6 +12,13 @@ import com.example.warehouseandroid.contractoradd.viewmodel.ContractorAddViewMod
 import com.example.warehouseandroid.contractordetails.viewmodel.ContractorDetailsViewModel
 import com.example.warehouseandroid.contractoredit.viewmodel.ContractorEditViewModel
 import com.example.warehouseandroid.contractorlist.viewmodel.ContractorListViewModel
+import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
+import com.example.warehouseandroid.receiptdocument.ReceiptDocumentRepository
+import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentDao
+import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalDataSource
+import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalRepository
+import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteDataSource
+import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteRepository
 import com.google.gson.Gson
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -37,6 +44,7 @@ val databaseModule = module {
         Realm.open(configuration)
     }
     single { ContractorDao(get()) }
+    single { ReceiptDocumentDao(get()) }
     single { Gson() }
 }
 
@@ -45,6 +53,9 @@ val repositoryModule = module {
     single<ContractorRemoteDataSource> { ContractorRemoteRepository(get()) }
     single<ContractorLocalDataSource> { ContractorLocalRepository(get()) }
     single<ContractorDataSource> { ContractorRepository(get(), get()) }
+    single<ReceiptDocumentRemoteDataSource> { ReceiptDocumentRemoteRepository(get()) }
+    single<ReceiptDocumentLocalDataSource> { ReceiptDocumentLocalRepository(get()) }
+    single<ReceiptDocumentDataSource> { ReceiptDocumentRepository(get(), get()) }
 }
 
 val viewModelModule = module {

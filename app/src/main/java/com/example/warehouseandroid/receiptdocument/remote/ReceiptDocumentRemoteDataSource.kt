@@ -7,5 +7,8 @@ interface ReceiptDocumentRemoteDataSource {
     suspend fun getAllReceiptDocuments(): ApiResult<List<ReceiptDocument>>
     suspend fun getReceiptDocument(id: Long): ApiResult<ReceiptDocument>
     suspend fun postReceiptDocument(receiptDocument: ReceiptDocument): ApiResult<ReceiptDocument>
-    suspend fun putReceiptDocument(receiptDocument: ReceiptDocument): ApiResult<ReceiptDocument>
+    suspend fun putReceiptDocument(
+        id: Long,
+        receiptDocument: ReceiptDocument
+    ): ApiResult<ReceiptDocument>
 }

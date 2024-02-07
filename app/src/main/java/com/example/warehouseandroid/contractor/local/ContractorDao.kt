@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 class ContractorDao(private val realm: Realm) {
     suspend fun insertContractors(contractors: List<ContractorEntity>) {
         realm.write {
-            contractors.forEach { contractorEntity ->
-                copyToRealm(contractorEntity)
+            contractors.forEach { contractor ->
+                copyToRealm(contractor)
             }
         }
     }
@@ -26,9 +26,9 @@ class ContractorDao(private val realm: Realm) {
     fun observeContractor(id: Long): Flow<SingleQueryChange<ContractorEntity>> =
         realm.query(CLASS_NAME, "id == $0", id).first().asFlow()
 
-    suspend fun insertContractor(contractorEntity: ContractorEntity) {
+    suspend fun insertContractor(contractor: ContractorEntity) {
         realm.write {
-            copyToRealm(contractorEntity)
+            copyToRealm(contractor)
         }
     }
 
