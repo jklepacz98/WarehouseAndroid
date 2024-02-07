@@ -9,6 +9,7 @@ import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScre
 import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.home.view.HomeScreen
+import com.example.warehouseandroid.receiptdocumentdetails.view.ReceiptDocumentDetailsScreen
 import com.example.warehouseandroid.receiptdocumentlist.view.ReceiptDocumentListScreen
 import com.example.warehouseandroid.ui.ErrorToast
 
@@ -18,27 +19,21 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
-            HomeScreen(
-                onContractorsButtonClick = { navController.navigate(Screen.ContractorList.route) },
-                onReceiptDocumentsButtonClick = { navController.navigate(Screen.ReceiptDocumentList.route) }
-            )
+            HomeScreen(onContractorsButtonClick = { navController.navigate(Screen.ContractorList.route) },
+                onReceiptDocumentsButtonClick = { navController.navigate(Screen.ReceiptDocumentList.route) })
         }
         composable(route = Screen.ContractorList.route) {
-            ContractorListScreen(
-                onContractorClick = { contractorId ->
-                    navController.navigate(Screen.ContractorDetails.route + "/$contractorId")
-                },
-                onAddContractorClick = {
-                    navController.navigate(Screen.ContractorAdd.route)
-                }
-            )
+            ContractorListScreen(onContractorClick = { contractorId ->
+                navController.navigate(Screen.ContractorDetails.route + "/$contractorId")
+            }, onAddContractorClick = {
+                navController.navigate(Screen.ContractorAdd.route)
+            })
         }
         composable(route = Screen.ContractorDetails.route + "/{contractorId}") { backStackEntry ->
             val contractorIdString = backStackEntry.arguments?.getString("contractorId")
             val contractorId = contractorIdString?.toLongOrNull()
             if (contractorId != null) {
-                ContractorDetailsScreen(
-                    contractorId = contractorId,
+                ContractorDetailsScreen(contractorId = contractorId,
                     onGoBackRequested = { navController.popBackStack() },
                     onEditContractorClick = { contractorJson -> navController.navigate(Screen.ContractorEdit.route + "/$contractorJson") })
             } else {
@@ -60,7 +55,23 @@ fun Navigation() {
         }
         composable(route = Screen.ReceiptDocumentList.route) {
             // TODO:
-            ReceiptDocumentListScreen(onReceiptDocumentClick = {}, onAddReceiptDocumentClick = {})
+            ReceiptDocumentListScreen(onReceiptDocumentClick = { receiptDocumentId ->
+                navController.navigate(Screen.ReceiptDocumentDetails.route + "/$receiptDocumentId")
+            }, onAddReceiptDocumentClick = {})
+        }
+        //todo
+        composable(route = Screen.ReceiptDocumentDetails.route + "/{receiptDocumentId}") { backStackEntry ->
+            val receiptDocumentIdString = backStackEntry.arguments?.getString("receiptDocumentId")
+            val receiptDocumentId = receiptDocumentIdString?.toLongOrNull()
+            if (receiptDocumentId != null) {
+                ReceiptDocumentDetailsScreen(
+                    onDocumentItemClick = {},
+                    onAddDocumentItemClick = {},
+                    receiptDocumentId = receiptDocumentId
+                )
+            } else {
+                ErrorToast(errorMessage = "Error: Receipt document id is null")
+            }
         }
     }
 }

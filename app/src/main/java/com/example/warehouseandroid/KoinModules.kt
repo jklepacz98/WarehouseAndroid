@@ -28,6 +28,7 @@ import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalDa
 import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalRepository
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteDataSource
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteRepository
+import com.example.warehouseandroid.receiptdocumentdetails.viewmodel.ReceiptDocumentDetailsViewModel
 import com.example.warehouseandroid.receiptdocumentlist.viewmodel.ReceiptDocumentListViewModel
 import com.google.gson.Gson
 import io.realm.kotlin.Realm
@@ -50,7 +51,6 @@ val apiModule = module {
 
 val databaseModule = module {
     single {
-        //todo
         val schema =
             setOf(ContractorEntity::class, ReceiptDocumentEntity::class, DocumentItemEntity::class)
         val configuration = RealmConfiguration.create(schema = schema)
@@ -80,5 +80,14 @@ val viewModelModule = module {
     viewModel { (contractorId: Long) -> ContractorDetailsViewModel(get(), get(), contractorId) }
     viewModel { ContractorAddViewModel(get()) }
     viewModel { (contractorJson: String) -> ContractorEditViewModel(get(), get(), contractorJson) }
+
     viewModel { ReceiptDocumentListViewModel(get()) }
+
+    viewModel { (receiptDocumentId: Long) ->
+        ReceiptDocumentDetailsViewModel(
+            get(),
+            get(),
+            receiptDocumentId
+        )
+    }
 }

@@ -25,7 +25,7 @@ class ContractorDetailsViewModel(
     init {
         //todo
         fetchContractor()
-        startObservingContractor()
+        observeContractor()
     }
 
     fun serializeContractor(): String {
@@ -61,7 +61,7 @@ class ContractorDetailsViewModel(
     }
 
 
-    private fun startObservingContractor() {
+    private fun observeContractor() {
         viewModelScope.launch {
             contractorDataSource.observeContractor(contractorId).collect() { resource ->
                 when (resource) {

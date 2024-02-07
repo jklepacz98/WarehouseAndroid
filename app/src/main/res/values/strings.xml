@@ -2,6 +2,9 @@
     <string name="app_name">WarehouseAndroid</string>
     <string name="no_symbol">No symbol</string>
     <string name="no_name">No name</string>
+    <string name="no_product_name">No product name</string>
+    <string name="no_units_of_measure">No units of measure</string>
+    <string name="no_amount">No amount</string>
     <string name="unknown_error">Unknown error</string>
     <string name="contractors">Contractors</string>
     <string name="contractor">Contractor</string>

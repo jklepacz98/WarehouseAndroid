@@ -25,6 +25,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.warehouseandroid.R
 import com.example.warehouseandroid.contractor.Contractor
@@ -50,7 +52,11 @@ fun ContractorDetailsScreen(
 
     Scaffold(topBar = {
         TopAppBar(
-            title = { androidx.compose.material3.Text(stringResource(id = R.string.contractor)) },
+            title = {
+                androidx.compose.material3.Text(
+                    contractor?.name ?: stringResource(id = R.string.no_name)
+                )
+            },
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary
@@ -81,9 +87,11 @@ fun ContractorDetailsBox(contractor: Contractor) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue)
     ) {
-        Text(text = contractor.name ?: stringResource(R.string.no_name))
-        Text(text = contractor.symbol ?: stringResource(R.string.no_symbol))
+        Text(
+            text = contractor.symbol ?: stringResource(R.string.no_symbol),
+            fontSize = 24.sp,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }

@@ -10,7 +10,7 @@ class DocumentItemMapper {
             return DocumentItemEntity().apply {
                 id = documentItem.id
                 productName = documentItem.productName
-                unitOfMeasure = documentItem.unitsOfMeasure
+                unitOfMeasure = documentItem.unitOfMeasure
                 amount = documentItem.amount
                 receiptDocumentId = documentItem.receiptDocumentId
             }
