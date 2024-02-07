@@ -2,7 +2,6 @@
 
 package com.example.warehouseandroid.contractordetails.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,7 +52,7 @@ fun ContractorDetailsScreen(
         TopAppBar(
             title = {
                 androidx.compose.material3.Text(
-                    contractor?.name ?: stringResource(id = R.string.no_name)
+                    contractor?.symbol ?: stringResource(R.string.no_symbol)
                 )
             },
             colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -89,7 +87,8 @@ fun ContractorDetailsBox(contractor: Contractor) {
             .fillMaxSize()
     ) {
         Text(
-            text = contractor.symbol ?: stringResource(R.string.no_symbol),
+
+            text = contractor.name ?: stringResource(id = R.string.no_name),
             fontSize = 24.sp,
             modifier = Modifier.padding(16.dp)
         )
