@@ -36,7 +36,7 @@ interface ApiService {
     @POST("receipt-document")
     suspend fun postReceiptDocument(@Body receiptDocument: ReceiptDocument): Response<ReceiptDocument>
 
-    @PUT("receipt-document/id")
+    @PUT("receipt-document/{id}")
     suspend fun putReceiptDocument(
         @Path("id") id: Long,
         @Body receiptDocument: ReceiptDocument

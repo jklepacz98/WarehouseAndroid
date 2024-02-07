@@ -10,6 +10,7 @@ import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.home.view.HomeScreen
 import com.example.warehouseandroid.receiptdocumentdetails.view.ReceiptDocumentDetailsScreen
+import com.example.warehouseandroid.receiptdocumentedit.view.ReceiptDocumentEditScreen
 import com.example.warehouseandroid.receiptdocumentlist.view.ReceiptDocumentListScreen
 import com.example.warehouseandroid.ui.ErrorToast
 
@@ -67,10 +68,24 @@ fun Navigation() {
                 ReceiptDocumentDetailsScreen(
                     onDocumentItemClick = {},
                     onAddDocumentItemClick = {},
+                    onEditReceiptDocumentClick = { receiptDocumentJson ->
+                        navController.navigate(
+                            Screen.ReceiptDocumentEdit.route + "/$receiptDocumentJson"
+                        )
+                    },
                     receiptDocumentId = receiptDocumentId
                 )
             } else {
                 ErrorToast(errorMessage = "Error: Receipt document id is null")
+            }
+        }
+        composable(route = Screen.ReceiptDocumentEdit.route + "/{receiptDocumentJson}") { backStackEntry ->
+            val receiptDocumentJson = backStackEntry.arguments?.getString("receiptDocumentJson")
+            if (receiptDocumentJson != null) {
+                ReceiptDocumentEditScreen(receiptDocumentJson = receiptDocumentJson) { navController.popBackStack() }
+            } else {
+                //todo
+                ErrorToast(errorMessage = "Error: ReceiptDocument is null")
             }
         }
     }

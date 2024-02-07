@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class ContractorEditViewModel(
     private val contractorDataSource: ContractorDataSource,
-    private val gson: Gson,
-    private val contractorJson: String
+    gson: Gson,
+    contractorJson: String
 ) :
     ViewModel() {
     val symbol: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())

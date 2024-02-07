@@ -29,6 +29,7 @@ import com.example.warehouseandroid.receiptdocument.local.ReceiptDocumentLocalRe
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteDataSource
 import com.example.warehouseandroid.receiptdocument.remote.ReceiptDocumentRemoteRepository
 import com.example.warehouseandroid.receiptdocumentdetails.viewmodel.ReceiptDocumentDetailsViewModel
+import com.example.warehouseandroid.receiptdocumentedit.viewmodel.ReceiptDocumentEditViewModel
 import com.example.warehouseandroid.receiptdocumentlist.viewmodel.ReceiptDocumentListViewModel
 import com.google.gson.Gson
 import io.realm.kotlin.Realm
@@ -87,7 +88,9 @@ val viewModelModule = module {
         ReceiptDocumentDetailsViewModel(
             get(),
             get(),
+            get(),
             receiptDocumentId
         )
     }
+    viewModel {(receiptDocumentJson: String) -> ReceiptDocumentEditViewModel(get(),get(),receiptDocumentJson)}
 }

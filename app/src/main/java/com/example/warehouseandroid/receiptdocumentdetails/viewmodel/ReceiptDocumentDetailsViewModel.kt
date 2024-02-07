@@ -7,12 +7,14 @@ import com.example.warehouseandroid.documentitem.DocumentItemDataSource
 import com.example.warehouseandroid.receiptdocument.ReceiptDocument
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
 import com.example.warehouseandroid.util.Resource
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ReceiptDocumentDetailsViewModel(
     private val receiptDocumentDataSource: ReceiptDocumentDataSource,
     private val documentItemDataSource: DocumentItemDataSource,
+    private val gson: Gson,
     private val receiptDocumentId: Long
 ) :
     ViewModel() {
@@ -32,6 +34,11 @@ class ReceiptDocumentDetailsViewModel(
     fun refresh() {
         fetchReceiptDocument()
         fetchAllDocumentItems()
+    }
+
+    fun serializeReceiptDocument():String {
+        val receiptDocument = receiptDocumentFlow.value
+        return gson.toJson(receiptDocument)
     }
 
     private fun fetchReceiptDocument() {

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -44,7 +45,9 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ReceiptDocumentDetailsScreen(
-    onDocumentItemClick: (Long) -> Unit, onAddDocumentItemClick: () -> Unit,
+    onDocumentItemClick: (Long) -> Unit,
+    onAddDocumentItemClick: () -> Unit,
+    onEditReceiptDocumentClick: (String) -> Unit,
     receiptDocumentId: Long
 ) {
     val viewModel =
@@ -70,8 +73,13 @@ fun ReceiptDocumentDetailsScreen(
                         contentDescription = stringResource(id = R.string.add_receipt_document)
                     )
                 }
+                IconButton(onClick = { onEditReceiptDocumentClick(viewModel.serializeReceiptDocument()) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = stringResource(id = R.string.edit_receipt_document)
+                    )
+                }
             },
-
             )
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {

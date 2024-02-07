@@ -19,7 +19,6 @@ class ContractorDetailsViewModel(
     val contractorFlow: MutableStateFlow<Contractor?> = MutableStateFlow(null)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private var observeContractorJob: Job? = null
     val goBack: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
