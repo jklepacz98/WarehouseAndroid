@@ -23,6 +23,7 @@ class DocumentItemEditViewModel(
     val amount: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isDocumentItemEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val documentItem: DocumentItem = deserializeDocumentItem(documentItemJson)
 
     init {
@@ -74,14 +75,17 @@ class DocumentItemEditViewModel(
                     //todo
                     is Resource.Success -> {
                         isDocumentItemEdited.value = true
+                        isLoading.value = false
                     }
 
                     is Resource.Error -> {
                         errorFlow.value = resource.message
-
+                        isLoading.value = false
                     }
 
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        isLoading.value = true
+                    }
                 }
             }
         }

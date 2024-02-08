@@ -18,6 +18,7 @@ class DocumentItemAddViewModel(
     val unitOfMeasure: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val amount: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isDocumentItemEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
 
     fun setProductName(textFieldValue: TextFieldValue) {
@@ -47,15 +48,18 @@ class DocumentItemAddViewModel(
                 when (resource) {
                     //todo
                     is Resource.Success -> {
+                        isLoading.value = false
                         isDocumentItemEdited.value = true
                     }
 
                     is Resource.Error -> {
+                        isLoading.value = false
                         errorFlow.value = resource.message
-
                     }
 
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        isLoading.value = true
+                    }
                 }
             }
         }

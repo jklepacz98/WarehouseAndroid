@@ -22,6 +22,7 @@ class ContractorEditViewModel(
     val name: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isContractorEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val contractor: Contractor = deserializeContractor(contractorJson)
 
     init {
@@ -60,15 +61,18 @@ class ContractorEditViewModel(
                 when (resource) {
                     //todo
                     is Resource.Success -> {
+                        isLoading.value = false
                         isContractorEdited.value = true
                     }
 
                     is Resource.Error -> {
+                        isLoading.value = false
                         errorFlow.value = resource.message
-
                     }
 
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        isLoading.value = true
+                    }
                 }
             }
         }

@@ -2,12 +2,14 @@
 
 package com.example.warehouseandroid.receiptdocumentedit.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +24,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,6 +42,7 @@ fun ReceiptDocumentEditScreen(receiptDocumentJson: String, onGoBackRequested: ()
         koinViewModel<ReceiptDocumentEditViewModel> { parametersOf(receiptDocumentJson) }
     val symbol by viewModel.symbol.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val goBack by viewModel.isReceiptDocumentEdited.collectAsStateWithLifecycle()
 
     LaunchedEffect(goBack) {
@@ -62,23 +66,29 @@ fun ReceiptDocumentEditScreen(receiptDocumentJson: String, onGoBackRequested: ()
             },
         )
     }) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            OutlinedTextField(
-                value = symbol,
-                onValueChange = { viewModel.setSymbol(it) },
-                label = { Text(text = stringResource(R.string.symbol)) },
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(
-                    onAny = { viewModel.putReceiptDocument() }
-                ),
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                OutlinedTextField(
+                    value = symbol,
+                    onValueChange = { viewModel.setSymbol(it) },
+                    label = { Text(text = stringResource(R.string.symbol)) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onAny = { viewModel.putReceiptDocument() }
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
         }
     }
 }

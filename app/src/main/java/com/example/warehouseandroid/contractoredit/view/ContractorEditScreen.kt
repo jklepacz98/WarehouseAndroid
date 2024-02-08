@@ -2,12 +2,14 @@
 
 package com.example.warehouseandroid.contractoredit.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -44,6 +47,7 @@ fun ContractorEditScreen(contractorJson: String, onGoBackRequested: () -> Unit) 
     val focusRequesterSymbol = remember { FocusRequester() }
     val focusRequesterName = remember { FocusRequester() }
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val goBack by viewModel.isContractorEdited.collectAsStateWithLifecycle()
 
     LaunchedEffect(goBack) {
@@ -67,38 +71,44 @@ fun ContractorEditScreen(contractorJson: String, onGoBackRequested: () -> Unit) 
             },
         )
     }) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            OutlinedTextField(
-                value = symbol,
-                onValueChange = { viewModel.setSymbol(it) },
-                label = { Text(text = stringResource(R.string.symbol)) },
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(
-                    onAny = { focusRequesterName.requestFocus() }
-                ),
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequesterSymbol)
-            )
-            OutlinedTextField(
-                value = name,
-                onValueChange = { viewModel.setName(it) },
-                label = { Text(text = stringResource(R.string.name)) },
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(
-                    //todo
-                    onAny = { viewModel.putContractor() }
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequesterName)
-            )
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                OutlinedTextField(
+                    value = symbol,
+                    onValueChange = { viewModel.setSymbol(it) },
+                    label = { Text(text = stringResource(R.string.symbol)) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onAny = { focusRequesterName.requestFocus() }
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequesterSymbol)
+                )
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { viewModel.setName(it) },
+                    label = { Text(text = stringResource(R.string.name)) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        //todo
+                        onAny = { viewModel.putContractor() }
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequesterName)
+                )
+            }
         }
     }
 }

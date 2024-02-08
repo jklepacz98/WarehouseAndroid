@@ -18,6 +18,7 @@
     <string name="receipt_documents">Receipt documents</string>
     <string name="add_receipt_document">Add receipt document</string>
     <string name="edit_receipt_document">Edit receipt document</string>
+    <string name="receipt_document_saved">Receipt document saved</string>
 
     <string name="document_item">Document item</string>
     <string name="document_items">Document items</string>
@@ -29,4 +30,5 @@
     <string name="no_product_name">No product name</string>
     <string name="no_unit_of_measure">No units of measure</string>
     <string name="no_amount">No amount</string>
+    <string name="document_item_saved">Document item saved</string>
 </resources>

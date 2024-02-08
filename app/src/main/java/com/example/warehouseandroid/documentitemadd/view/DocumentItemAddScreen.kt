@@ -2,12 +2,14 @@
 
 package com.example.warehouseandroid.documentitemadd.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -47,6 +50,7 @@ fun DocumentItemAddScreen(onGoBackRequested: () -> Unit, receiptDocumentId: Long
     val focusRequesterUnitOfMeasure = remember { FocusRequester() }
     val focusRequesterAmount = remember { FocusRequester() }
     val errorMessage by viewModel.errorFlow.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val goBack by viewModel.isDocumentItemEdited.collectAsStateWithLifecycle()
 
     LaunchedEffect(goBack) {
@@ -70,48 +74,56 @@ fun DocumentItemAddScreen(onGoBackRequested: () -> Unit, receiptDocumentId: Long
             },
         )
     }) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            OutlinedTextField(
-                value = productName,
-                onValueChange = { viewModel.setProductName(it) },
-                label = { Text(text = stringResource(R.string.product_name)) },
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onAny = { focusRequesterUnitOfMeasure.requestFocus() }),
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequesterProductName)
-            )
-            OutlinedTextField(
-                value = unitOfMeasure,
-                onValueChange = { viewModel.setUnitOfMeasure(it) },
-                label = { Text(text = stringResource(R.string.unit_of_measure)) },
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(
-                    //todo
-                    onAny = { focusRequesterAmount.requestFocus() }),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequesterUnitOfMeasure)
-            )
-            OutlinedTextField(
-                value = amount,
-                onValueChange = { viewModel.setAmount(it) },
-                label = { Text(text = stringResource(R.string.amount)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number).copy(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(
-                    //todo
-                    onAny = { viewModel.postDocumentItem() }),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequesterUnitOfMeasure)
-            )
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                OutlinedTextField(
+                    value = productName,
+                    onValueChange = { viewModel.setProductName(it) },
+                    label = { Text(text = stringResource(R.string.product_name)) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onAny = { focusRequesterUnitOfMeasure.requestFocus() }),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequesterProductName)
+                )
+                OutlinedTextField(
+                    value = unitOfMeasure,
+                    onValueChange = { viewModel.setUnitOfMeasure(it) },
+                    label = { Text(text = stringResource(R.string.unit_of_measure)) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        //todo
+                        onAny = { focusRequesterAmount.requestFocus() }),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequesterUnitOfMeasure)
+                )
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { viewModel.setAmount(it) },
+                    label = { Text(text = stringResource(R.string.amount)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number).copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        //todo
+                        onAny = { viewModel.postDocumentItem() }),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequesterAmount)
+                )
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ class ReceiptDocumentEditViewModel(
     val name: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isReceiptDocumentEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val receiptDocument: ReceiptDocument = deserializeReceiptDocument(receiptDocumentJson)
 
 
@@ -43,24 +44,25 @@ class ReceiptDocumentEditViewModel(
     }
 
     fun putReceiptDocument() {
-        //todo
         val newReceiptDocument = ReceiptDocument(0, symbol.value.text, receiptDocument.contractor)
         val id = receiptDocument.id
         viewModelScope.launch {
             receiptDocumentDataSource.putReceiptDocument(id, newReceiptDocument)
                 .collect { resource ->
                     when (resource) {
-                        //todo
                         is Resource.Success -> {
                             isReceiptDocumentEdited.value = true
+                            isLoading.value = false
                         }
 
                         is Resource.Error -> {
                             errorFlow.value = resource.message
-
+                            isLoading.value = false
                         }
 
-                        is Resource.Loading -> {}
+                        is Resource.Loading -> {
+                            isLoading.value = true
+                        }
                     }
                 }
         }
