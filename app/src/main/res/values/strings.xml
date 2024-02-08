@@ -23,7 +23,10 @@
     <string name="document_items">Document items</string>
     <string name="add_document_item">Add document item</string>
     <string name="edit_document_item">Edit document item</string>
+    <string name="product_name">Product name</string>
+    <string name="unit_of_measure">Unit of measure</string>
+    <string name="amount">Amount</string>
     <string name="no_product_name">No product name</string>
-    <string name="no_units_of_measure">No units of measure</string>
+    <string name="no_unit_of_measure">No units of measure</string>
     <string name="no_amount">No amount</string>
 </resources>

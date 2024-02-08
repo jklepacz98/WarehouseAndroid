@@ -1,5 +1,6 @@
 package com.example.warehouseandroid.receiptdocumentedit.viewmodel
 
+import android.net.Uri
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ReceiptDocumentEditViewModel(
     private val receiptDocumentDataSource: ReceiptDocumentDataSource,
-    gson: Gson,
+    private val gson: Gson,
     receiptDocumentJson: String
 ) :
     ViewModel() {
@@ -21,8 +22,8 @@ class ReceiptDocumentEditViewModel(
     val name: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isReceiptDocumentEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
-    val receiptDocument: ReceiptDocument =
-        gson.fromJson(receiptDocumentJson, ReceiptDocument::class.java)
+    private val receiptDocument: ReceiptDocument = deserializeReceiptDocument(receiptDocumentJson)
+
 
     init {
         receiptDocument.symbol?.let {
@@ -33,6 +34,9 @@ class ReceiptDocumentEditViewModel(
             setSymbol(textFieldValue)
         }
     }
+
+    private fun deserializeReceiptDocument(receiptDocumentJson: String): ReceiptDocument =
+        gson.fromJson(Uri.decode(receiptDocumentJson), ReceiptDocument::class.java)
 
     fun setSymbol(textFieldValue: TextFieldValue) {
         symbol.value = textFieldValue

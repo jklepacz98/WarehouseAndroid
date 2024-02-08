@@ -27,7 +27,7 @@ class ContractorDetailsViewModel(
 
     fun serializeContractor(): String {
         val contractor = contractorFlow.value
-        return gson.toJson(contractor)
+        return (gson.toJson(contractor))
     }
 
     fun refresh() {

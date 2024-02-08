@@ -1,5 +1,6 @@
 package com.example.warehouseandroid.receiptdocumentdetails.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.documentitem.DocumentItem
@@ -36,9 +37,9 @@ class ReceiptDocumentDetailsViewModel(
         fetchAllDocumentItems()
     }
 
-    fun serializeReceiptDocument():String {
+    fun serializeReceiptDocument(): String {
         val receiptDocument = receiptDocumentFlow.value
-        return gson.toJson(receiptDocument)
+        return Uri.encode(gson.toJson(receiptDocument))
     }
 
     private fun fetchReceiptDocument() {

@@ -1,5 +1,6 @@
 package com.example.warehouseandroid.documentitemdetails.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.documentitem.DocumentItem
@@ -27,7 +28,7 @@ class DocumentItemDetailsViewModel(
 
     fun serializeDocumentItem(): String {
         val documentItem = documentItemFlow.value
-        return gson.toJson(documentItem)
+        return Uri.encode(gson.toJson(documentItem))
     }
 
     private fun fetchDocumentItem() {

@@ -11,6 +11,7 @@ import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScre
 import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
 import com.example.warehouseandroid.documentitemdetails.view.DocumentItemDetailsScreen
+import com.example.warehouseandroid.documentitemedit.view.DocumentItemEditScreen
 import com.example.warehouseandroid.home.view.HomeScreen
 import com.example.warehouseandroid.receiptdocumentdetails.view.ReceiptDocumentDetailsScreen
 import com.example.warehouseandroid.receiptdocumentedit.view.ReceiptDocumentEditScreen
@@ -40,7 +41,6 @@ fun Navigation() {
         addReceiptDocumentDetailsRoute(navController)
         addReceiptDocumentAddRoute(navController)
         addReceiptDocumentEditRoute(navController)
-        addDocumentItemListRoute(navController)
         addDocumentItemDetailsRoute(navController)
         addDocumentItemAddRoute(navController)
         addDocumentItemEditRoute(navController)
@@ -145,10 +145,6 @@ private fun NavGraphBuilder.addReceiptDocumentEditRoute(navController: NavContro
     }
 }
 
-private fun NavGraphBuilder.addDocumentItemListRoute(navController: NavController) {
-
-}
-
 private fun NavGraphBuilder.addDocumentItemDetailsRoute(navController: NavController) {
     composable(route = Screen.DocumentItemDetails.route + "/{documentItemId}") { backStackEntry ->
         val documentItemIdString = backStackEntry.arguments?.getString("documentItemId")
@@ -172,6 +168,16 @@ private fun NavGraphBuilder.addDocumentItemAddRoute(navController: NavController
 }
 
 private fun NavGraphBuilder.addDocumentItemEditRoute(navController: NavController) {
-
+    composable(route = Screen.DocumentItemEdit.route + "/{documentItemJson}") { backStackEntry ->
+        val documentItemJson = backStackEntry.arguments?.getString("documentItemJson")
+        if (documentItemJson != null) {
+            DocumentItemEditScreen(
+                documentItemJson = documentItemJson,
+                onGoBackRequested = { navController.popBackStack() })
+        } else {
+            //todo
+            ErrorToast(errorMessage = "Error: Document item is null")
+        }
+    }
 }
 
