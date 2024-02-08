@@ -39,6 +39,10 @@ fun NavController.navigateToDocumentItemDetails(documentItemId: Long) {
     navigate(Screen.DocumentItemDetails.route + "/$documentItemId")
 }
 
+fun NavController.navigateToDocumentItemAdd(receiptDocumentId: Long) {
+    navigate(Screen.DocumentItemAdd.route + "/$receiptDocumentId")
+}
+
 fun NavController.navigateToDocumentItemEdit(documentItemJson: String) {
     navigate(Screen.DocumentItemEdit.route + "/$documentItemJson")
 }

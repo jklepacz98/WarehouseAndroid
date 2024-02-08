@@ -10,6 +10,7 @@ import com.example.warehouseandroid.contractoradd.view.ContractorAddScreen
 import com.example.warehouseandroid.contractordetails.view.ContractorDetailsScreen
 import com.example.warehouseandroid.contractoredit.view.ContractorEditScreen
 import com.example.warehouseandroid.contractorlist.view.ContractorListScreen
+import com.example.warehouseandroid.documentitemadd.view.DocumentItemAddScreen
 import com.example.warehouseandroid.documentitemdetails.view.DocumentItemDetailsScreen
 import com.example.warehouseandroid.documentitemedit.view.DocumentItemEditScreen
 import com.example.warehouseandroid.home.view.HomeScreen
@@ -21,6 +22,7 @@ import com.example.warehouseandroid.util.navigateToContractorAdd
 import com.example.warehouseandroid.util.navigateToContractorDetails
 import com.example.warehouseandroid.util.navigateToContractorEdit
 import com.example.warehouseandroid.util.navigateToContractorList
+import com.example.warehouseandroid.util.navigateToDocumentItemAdd
 import com.example.warehouseandroid.util.navigateToDocumentItemDetails
 import com.example.warehouseandroid.util.navigateToDocumentItemEdit
 import com.example.warehouseandroid.util.navigateToReceiptDocumentDetails
@@ -117,7 +119,9 @@ private fun NavGraphBuilder.addReceiptDocumentDetailsRoute(navController: NavCon
                 onDocumentItemClick = { documentItemId ->
                     navController.navigateToDocumentItemDetails(documentItemId)
                 },
-                onAddDocumentItemClick = {},
+                onAddDocumentItemClick = { receiptDocumentId ->
+                    navController.navigateToDocumentItemAdd(receiptDocumentId)
+                },
                 onEditReceiptDocumentClick = { receiptDocumentJson ->
                     navController.navigateToReceiptDocumentEdit(receiptDocumentJson)
                 },
@@ -137,7 +141,7 @@ private fun NavGraphBuilder.addReceiptDocumentEditRoute(navController: NavContro
     composable(route = Screen.ReceiptDocumentEdit.route + "/{receiptDocumentJson}") { backStackEntry ->
         val receiptDocumentJson = backStackEntry.arguments?.getString("receiptDocumentJson")
         if (receiptDocumentJson != null) {
-            ReceiptDocumentEditScreen(receiptDocumentJson = receiptDocumentJson) { navController.popBackStack() }
+            ReceiptDocumentEditScreen(receiptDocumentJson) { navController.popBackStack() }
         } else {
             //todo
             ErrorToast(errorMessage = "Error: ReceiptDocument is null")
@@ -164,7 +168,18 @@ private fun NavGraphBuilder.addDocumentItemDetailsRoute(navController: NavContro
 }
 
 private fun NavGraphBuilder.addDocumentItemAddRoute(navController: NavController) {
-
+    composable(route = Screen.DocumentItemAdd.route + "/{receiptDocumentId}") { backStackEntry ->
+        val receiptDocumentIdString = backStackEntry.arguments?.getString("receiptDocumentId")
+        val receiptDocumentId = receiptDocumentIdString?.toLongOrNull()
+        if (receiptDocumentId != null) {
+            DocumentItemAddScreen(
+                onGoBackRequested = { navController.popBackStack() },
+                receiptDocumentId = receiptDocumentId
+            )
+        } else {
+            ErrorToast(errorMessage = "Error: Receipt document id is null")
+        }
+    }
 }
 
 private fun NavGraphBuilder.addDocumentItemEditRoute(navController: NavController) {

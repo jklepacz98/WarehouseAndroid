@@ -46,7 +46,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ReceiptDocumentDetailsScreen(
     onDocumentItemClick: (Long) -> Unit,
-    onAddDocumentItemClick: () -> Unit,
+    onAddDocumentItemClick: (Long) -> Unit,
     onEditReceiptDocumentClick: (String) -> Unit,
     receiptDocumentId: Long
 ) {
@@ -67,7 +67,7 @@ fun ReceiptDocumentDetailsScreen(
                 titleContentColor = MaterialTheme.colorScheme.primary
             ),
             actions = {
-                IconButton(onClick = { onAddDocumentItemClick() }) {
+                IconButton(onClick = { onAddDocumentItemClick(receiptDocumentId) }) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_receipt_document)
@@ -80,7 +80,7 @@ fun ReceiptDocumentDetailsScreen(
                     )
                 }
             },
-            )
+        )
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             DocumentItemsLazyColumn(

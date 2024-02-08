@@ -1,22 +1,17 @@
-package com.example.warehouseandroid.documentitemedit.viewmodel
+package com.example.warehouseandroid.documentitemadd.viewmodel
 
-import android.net.Uri
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.documentitem.DocumentItem
 import com.example.warehouseandroid.documentitem.DocumentItemDataSource
 import com.example.warehouseandroid.util.Resource
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.KoinApplication.Companion.init
 
-class DocumentItemEditViewModel(
+class DocumentItemAddViewModel(
     private val documentItemDataSource: DocumentItemDataSource,
-    private val gson: Gson,
-    documentItemJson: String
+    private val receiptDocumentId: Long
 ) :
     ViewModel() {
     val productName: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
@@ -24,27 +19,6 @@ class DocumentItemEditViewModel(
     val amount: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     val isDocumentItemEdited: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
-    private val documentItem: DocumentItem = deserializeDocumentItem(documentItemJson)
-
-    init {
-        documentItem.productName?.let { string ->
-            setProductName(createTextFieldValueWithSelection(string))
-        }
-        documentItem.unitOfMeasure?.let { string ->
-            setUnitOfMeasure(createTextFieldValueWithSelection(string))
-        }
-        documentItem.amount?.let { float ->
-            setAmount(createTextFieldValueWithSelection(float.toString()))
-        }
-    }
-
-    private fun deserializeDocumentItem(documentItemJson: String) : DocumentItem =
-        gson.fromJson(Uri.decode(documentItemJson), DocumentItem::class.java)
-
-
-    private fun createTextFieldValueWithSelection(string: String) =
-        TextFieldValue(text = string, selection = TextRange(string.length))
-
 
     fun setProductName(textFieldValue: TextFieldValue) {
         productName.value = textFieldValue
@@ -59,18 +33,17 @@ class DocumentItemEditViewModel(
         if (canConvertToFloat) amount.value = textFieldValue
     }
 
-    fun putDocumentItem() {
+    fun postDocumentItem() {
         val amount = this.amount.value.text.toFloatOrNull()
         val newDocumentItem = DocumentItem(
             0,
             productName.value.text,
             unitOfMeasure.value.text,
             amount,
-            documentItem.receiptDocumentId
+            receiptDocumentId
         )
-        val id = documentItem.id
         viewModelScope.launch {
-            documentItemDataSource.putDocumentItem(id, newDocumentItem).collect { resource ->
+            documentItemDataSource.postDocumentItem(newDocumentItem).collect { resource ->
                 when (resource) {
                     //todo
                     is Resource.Success -> {

@@ -20,6 +20,7 @@ import com.example.warehouseandroid.documentitem.local.DocumentItemLocalDataSour
 import com.example.warehouseandroid.documentitem.local.DocumentItemLocalRepository
 import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteDataSource
 import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteRepository
+import com.example.warehouseandroid.documentitemadd.viewmodel.DocumentItemAddViewModel
 import com.example.warehouseandroid.documentitemdetails.viewmodel.DocumentItemDetailsViewModel
 import com.example.warehouseandroid.documentitemedit.viewmodel.DocumentItemEditViewModel
 import com.example.warehouseandroid.receiptdocument.ReceiptDocumentDataSource
@@ -86,33 +87,19 @@ val viewModelModule = module {
 
     viewModel { ReceiptDocumentListViewModel(get()) }
     viewModel { (receiptDocumentId: Long) ->
-        ReceiptDocumentDetailsViewModel(
-            get(),
-            get(),
-            get(),
-            receiptDocumentId
-        )
+        ReceiptDocumentDetailsViewModel(get(), get(), get(), receiptDocumentId)
     }
     viewModel { (receiptDocumentJson: String) ->
-        ReceiptDocumentEditViewModel(
-            get(),
-            get(),
-            receiptDocumentJson
-        )
+        ReceiptDocumentEditViewModel(get(), get(), receiptDocumentJson)
     }
 
     viewModel { (documentItemId: Long) ->
-        DocumentItemDetailsViewModel(
-            get(),
-            get(),
-            documentItemId
-        )
+        DocumentItemDetailsViewModel(get(), get(), documentItemId)
+    }
+    viewModel { (receiptDocumentId: Long) ->
+        DocumentItemAddViewModel(get(), receiptDocumentId)
     }
     viewModel { (documentItemJson: String) ->
-        DocumentItemEditViewModel(
-            get(),
-            get(),
-            documentItemJson
-        )
+        DocumentItemEditViewModel(get(), get(), documentItemJson)
     }
 }
