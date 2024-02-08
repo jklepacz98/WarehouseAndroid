@@ -1,5 +1,6 @@
 package com.example.warehouseandroid.contractordetails.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouseandroid.contractor.Contractor
@@ -27,7 +28,7 @@ class ContractorDetailsViewModel(
 
     fun serializeContractor(): String {
         val contractor = contractorFlow.value
-        return (gson.toJson(contractor))
+        return Uri.encode(gson.toJson(contractor))
     }
 
     fun refresh() {
