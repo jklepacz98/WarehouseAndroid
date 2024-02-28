@@ -1,7 +1,6 @@
 package com.example.warehouseandroid.documentitem
 
 import com.example.warehouseandroid.documentitem.local.DocumentItemLocalDataSource
-import com.example.warehouseandroid.documentitem.mapper.DocumentItemMapper
 import com.example.warehouseandroid.documentitem.remote.DocumentItemRemoteDataSource
 import com.example.warehouseandroid.util.ApiResult
 import com.example.warehouseandroid.util.DatabaseResult
@@ -64,8 +63,7 @@ class DocumentItemRepository(
         documentItemLocalDataSource.observeDocumentItem(id).collect { result ->
             when (result) {
                 is DatabaseResult.Success -> {
-                    val documentItemList = DocumentItemMapper.mapToDocumentItem(result.data)
-                    emit(Resource.Success(documentItemList))
+                    emit(Resource.Success(result.data))
                 }
 
                 is DatabaseResult.Error -> emit(
@@ -98,8 +96,7 @@ class DocumentItemRepository(
             documentItemLocalDataSource.observeDocumentItems(receiptDocumentId).collect { result ->
                 when (result) {
                     is DatabaseResult.Success -> {
-                        val documentItemList = DocumentItemMapper.mapToDocumentItems(result.data)
-                        emit(Resource.Success(documentItemList))
+                        emit(Resource.Success(result.data))
                     }
 
                     is DatabaseResult.Error -> emit(
@@ -125,8 +122,7 @@ class DocumentItemRepository(
     }
 
     private suspend fun FlowCollector<Resource<DocumentItem>>.fillCache(data: DocumentItem) {
-        val documentItemEntity = DocumentItemMapper.mapToDocumentItemEntity(data)
-        val result = documentItemLocalDataSource.insertDocumentItem(documentItemEntity)
+        val result = documentItemLocalDataSource.insertDocumentItem(data)
         when (result) {
             is DatabaseResult.Error -> emit(
                 Resource.Error(
@@ -155,8 +151,7 @@ class DocumentItemRepository(
     }
 
     private suspend fun FlowCollector<Resource<List<DocumentItem>>>.fillCache(data: List<DocumentItem>) {
-        val documentItemEntityList = DocumentItemMapper.mapToDocumentItemEntities(data)
-        val result = documentItemLocalDataSource.insertDocumentItems(documentItemEntityList)
+        val result = documentItemLocalDataSource.insertDocumentItems(data)
         when (result) {
             is DatabaseResult.Error -> emit(
                 Resource.Error(
